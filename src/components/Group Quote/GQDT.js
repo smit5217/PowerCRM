@@ -48,7 +48,7 @@ function GQDT(props) {
       selector: (row) => row.site_name,
     },
     {
-      name: "Type of Owner",
+      name: "Type Of Owner",
       selector: (row) => row.type_of_owner,
     },
     {

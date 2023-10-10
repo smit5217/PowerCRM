@@ -34,7 +34,6 @@ const initialSiteState = {
 };
 
 const CompanyReducer = (state, action) => {
-  // console.log(action);
   if (action?.all) {
     return action.data;
   }
@@ -57,30 +56,20 @@ const CompanyReducer = (state, action) => {
   return returnedObj;
 };
 
-// helper function for turnary
 const turnaryOperation = function (data) {
   return data ?? "";
 };
+
 function EditCompany() {
-  // reducer
   const [companyData, dispatchInputChange] = useReducer(
     CompanyReducer,
     initialSiteState
   );
-  //navigate back
   const navigate = useNavigate();
-  // state for tabs
   const [key, setKey] = useState(0);
-  const [formState, setFormState] = useState({
-    error: "",
-    // submitting: false,
-  });
-  // getting parameter
-  const paramsId = useParams().editId;
-  // console.log(paramsId);
-  // const paramsId = useParams();
 
-  // custom hook for sending data
+  const paramsId = useParams().editId;
+
   const [
     sendcompanyData,
     setCompanyReqData,
@@ -90,7 +79,6 @@ function EditCompany() {
     setStatus,
   ] = useFetch();
 
-  // for getting data by id
   const [
     companyGETData,
     setCompanyGETData,
@@ -99,10 +87,7 @@ function EditCompany() {
     setCompanyGetResponseData,
   ] = useFetch();
 
-  // useEffect to load the data
   useEffect(() => {
-    // return;
-    // console.log(paramsId);
     if (paramsId && !responseGetcompanyData) {
       setCompanyGETData({
         ...companyGETData,
@@ -118,7 +103,6 @@ function EditCompany() {
         expectStatusCode: [200, 201],
       });
     }
-    // mean we got data now
     if (responseGetcompanyData) {
       const responseData = {
         accountName: turnaryOperation(responseGetcompanyData.data.account_name),
@@ -168,33 +152,6 @@ function EditCompany() {
         addressline3Company: turnaryOperation(
           responseGetcompanyData.data.billing_address?.addressline3_company
         ),
-        // billingAddressLine4: turnaryOperation(
-        //   responseGetcompanyData.data.billing_address?.addressline4
-        // ),
-        // billingCountry: turnaryOperation(
-        //   responseGetcompanyData.data.billing_address?.country
-        // ),
-        // billingPostCode: turnaryOperation(
-        //   responseGetcompanyData.data.billing_address?.postcode
-        // ),
-        // siteAddressLine1: turnaryOperation(
-        //   responseGetcompanyData.data.site_address?.addressline1
-        // ),
-        // siteAddressLine2: turnaryOperation(
-        //   responseGetcompanyData.data.site_address?.addressline2
-        // ),
-        // siteAddressLine3: turnaryOperation(
-        //   responseGetcompanyData.data.site_address?.addressline3
-        // ),
-        // siteAddressLine4: turnaryOperation(
-        //   responseGetcompanyData.data.site_address?.addressline4
-        // ),
-        // siteCountry: turnaryOperation(
-        //   responseGetcompanyData.data.site_address?.country
-        // ),
-        // sitePostCode: turnaryOperation(
-        //   responseGetcompanyData.data.site_address?.postcode
-        // ),
         isBillingSiteSame: false,
         firstName: turnaryOperation(
           responseGetcompanyData.data.contacts?.first_name
@@ -220,17 +177,12 @@ function EditCompany() {
     }
   }, [paramsId, responseGetcompanyData]);
 
-  // for selection box changed
   const handleSelectionChange = (fileName, file) => {
-    // console.log(file);
     dispatchInputChange({ type: fileName, value: file });
   };
 
-  // edit site function
   const editCompany = function (e) {
-    // console.log("here");
     e.preventDefault();
-    // console.log(companyData.businessType);
     let sendData = {
       account_name: companyData.accountName,
       account_no: companyData.accountNo,
@@ -252,21 +204,11 @@ function EditCompany() {
       sic_code: companyData.sicCode,
       time_at_address_months: companyData.timeAtAddressMonths,
       time_at_address_years: companyData.timeAtAddressYears,
-
       billing_address: {
         addressline1_company: companyData.addressline1Company,
         addressline2_company: companyData.addressline2Company,
         addressline3_company: companyData.addressline3Company,
       },
-
-      // site_address: {
-      //   addressline1: companyData.siteAddressLine1,
-      //   addressline2: companyData.siteAddressLine2,
-      //   addressline3: companyData.siteAddressLine3,
-      //   addressline4: companyData.siteAddressLine4,
-      //   country: companyData.siteCountry,
-      //   postcode: companyData.sitePostCode,
-      // },
     };
     const contactInfo = {
       contacts: {
@@ -289,23 +231,6 @@ function EditCompany() {
     ) {
       sendData = { ...sendData, ...contactInfo };
     }
-    // console.log(companyData.firstName?.length);
-    // console.log(companyData.lastName?.length);
-    // console.log(companyData.contactTitle?.length);
-    // console.log(companyData.telephoneNumber?.length);
-    // console.log(companyData.email?.length);
-
-    // if (
-    //   companyData.firstName?.length < 1 ||
-    //   companyData.lastName?.length < 1 ||
-    //   // companyData.contactTitle?.length < 1 ||
-    //   companyData.telephoneNumber?.length < 1 ||
-    //   companyData.email?.length < 1
-    // ) {
-    //   setFormState({ error: "Please fill all fields" });
-    // setisNext(false);
-    //   return;
-    // }
     setCompanyResponseData(null);
     setStatus({ isLoading: true, isError: false });
     setCompanyReqData({
@@ -323,8 +248,8 @@ function EditCompany() {
       expectStatusCode: [200, 201],
     });
   };
+
   useEffect(() => {
-    // console.log(responsecompanyData.status);
     if (responsecompanyData) {
       if (
         responsecompanyData.status === 200 ||
@@ -338,111 +263,13 @@ function EditCompany() {
   if (reqGetCompanyStatus.isLoading) {
     return <LoadingData className="text-center" />;
   }
+
   const changeTab = function (isNext = true) {
     setKey((oldKey) => {
       return isNext ? oldKey + 1 : oldKey - 1;
     });
-    // switch (key) {
-    //   case 0:
-    //     if (
-    //       companyData.numberOfEmployees?.length < 1 ||
-    //       companyData.companyName?.length < 1 ||
-    //       companyData.businessType?.length < 1 ||
-    //       companyData.registrationNo?.length < 1 ||
-    //       companyData.estimatedTurnover?.length < 1
-    //     ) {
-    //       setFormState({ error: "Please fill all fields" });
-    //       // setisNext(false);
-
-    //       return;
-    //     } else {
-    //       setFormState({ error: "" });
-    //       setKey((oldKey) => {
-    //         return isNext ? oldKey + 1 : oldKey - 1;
-    //       });
-    //     }
-    //     break;
-    //   case 1:
-    //     if (
-    //       companyData.addressline1Company?.length < 1 ||
-    //       companyData.postCode?.length < 1 ||
-    //       companyData.countryOfCompany?.length < 1
-    //     ) {
-    //       setFormState({ error: "Please fill all fields" });
-    //       // setisNext(false);
-
-    //       return;
-    //     } else {
-    //       setFormState({ error: "" });
-    //       setKey((oldKey) => {
-    //         return isNext ? oldKey + 1 : oldKey - 1;
-    //       });
-    //     }
-    //     break;
-    //   case 2:
-    //     if (
-    //       companyData.accountName?.length < 1 ||
-    //       companyData.bankName?.length < 1 ||
-    //       companyData.accountNo?.length < 1 ||
-    //       companyData.shortCode?.length < 1
-    //     ) {
-    //       setFormState({ error: "Please fill all fields" });
-    //       // setisNext(false);
-
-    //       return;
-    //     } else {
-    //       setFormState({ error: "" });
-    //       setKey((oldKey) => {
-    //         return isNext ? oldKey + 1 : oldKey - 1;
-    //       });
-    //     }
-    //     break;
-    //   case 3:
-    //     console.log(companyData.partnerName?.length);
-    //     console.log(companyData.partnerDob?.length);
-    //     console.log(companyData.address?.length);
-    //     console.log(companyData.homePostCode?.length);
-    //     if (
-    //       companyData.partnerName?.length < 1 ||
-    //       companyData.partnerDob?.length < 1 ||
-    //       companyData.address?.length < 1 ||
-    //       companyData.homePostCode?.length < 1
-    //     ) {
-    //       setFormState({ error: "Please fill all fields" });
-    //       // setisNext(false);
-
-    //       return;
-    //     } else {
-    //       setFormState({ error: "" });
-    //       setKey((oldKey) => {
-    //         return isNext ? oldKey + 1 : oldKey - 1;
-    //       });
-    //     }
-    //     break;
-
-    //   // case 4:
-    //   //   if (
-    //   //     companyData.firstName?.length < 1 ||
-    //   //     companyData.lastName?.length < 1 ||
-    //   //     companyData.contactTitle?.length < 1 ||
-    //   //     companyData.telephoneNumber?.length < 1 ||
-    //   //     companyData.email?.length < 1
-    //   //   ) {
-    //   //     setFormState({ error: "Please fill all fields" });
-    //   //     // setisNext(false);
-    //   //     return;
-    //   //   } else {
-    //   //     setFormState({ error: "" });
-    //   //     setKey((oldKey) => {
-    //   //       return isNext ? oldKey + 1 : oldKey - 1;
-    //   //     });
-    //   //   }
-    //   //   break;
-    //   default:
-    //     setFormState({ error: "" });
-    //     break;
-    // }
   };
+
   return (
     <>
       <NeumorphismWrapper>
@@ -460,7 +287,7 @@ function EditCompany() {
             >
               <Tab eventKey={0} title="Company Info">
                 <Form.Group className="mb-3 col-12" controlId="name">
-                  <Form.Label>Name of the Company</Form.Label>
+                  <Form.Label>Name Of Company</Form.Label>
                   <Form.Control
                     type="text"
                     name="name"
@@ -478,20 +305,13 @@ function EditCompany() {
                   <Form.Control
                     type="text"
                     name="parentCompany"
-                    // value={siteData.parentCompany}
-                    // onChange={(e) =>
-                    //   dispatchInputChange({
-                    //     type: "parentCompany",
-                    //     value: e.target.value,
-                    //   })
-                    // }
                   />
                 </Form.Group>
                 <Form.Group
                   className="mb-3 col-12"
                   controlId="numberOfEmployees"
                 >
-                  <Form.Label>Number of employees</Form.Label>
+                  <Form.Label>Number Of Employees</Form.Label>
                   <Form.Control
                     type="number"
                     name="numberOfEmployees"
@@ -534,7 +354,7 @@ function EditCompany() {
                   className="mb-3 col-12"
                   controlId="estimatedTurnover"
                 >
-                  <Form.Label>Estimated turnover</Form.Label>
+                  <Form.Label>Estimated Turnover</Form.Label>
                   <Form.Control
                     type="number"
                     name="estimatedTurnover"
@@ -547,63 +367,13 @@ function EditCompany() {
                     }
                   />
                 </Form.Group>
-
-                {/* <Form.Group className="mb-3 col-12" controlId="typeOfOwner">
-                      <Form.Label>Type of owner</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="typeOfOwner"
-                        value={companyData.typeOfOwner}
-                        onChange={(e) =>
-                          dispatchInputChange({
-                            type: "typeOfOwner",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3 col-12" controlId="ownerName">
-                      <Form.Label>Owner Name</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="ownerName"
-                        value={companyData.ownerName}
-                        onChange={(e) =>
-                          dispatchInputChange({
-                            type: "ownerName",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group>
-                    <Form.Group
-                      className="mb-3 col-12"
-                      controlId="currentSupplier">
-                      <Form.Label>
-                        Current gas and electricity supplier details
-                      </Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="currentSupplier"
-                        value={companyData.currentSupplier}
-                        onChange={(e) =>
-                          dispatchInputChange({
-                            type: "currentSupplier",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group> */}
-
-                <Form.Group className="mb-3 col-12" controlId="isMacroBusiness">
-                  <Form.Check // prettier-ignore
+                <Form.Group className="col-12" controlId="isMacroBusiness">
+                  <Form.Check
                     type="switch"
                     id="custom-switch"
-                    label="Is Micro Business?"
+                    label="Micro Business"
                     checked={companyData.isMacroBusiness}
                     onChange={(e) => {
-                      // console.log(companyData.isMacroBusiness);
-                      // console.log(e.target.checked);
                       dispatchInputChange({
                         type: "isMacroBusiness",
                         value: e.target.checked,
@@ -611,34 +381,6 @@ function EditCompany() {
                     }}
                   />
                 </Form.Group>
-                {/* <Form.Group className="mb-3 col-12" controlId="isVacant">
-                      <Form.Check // prettier-ignore
-                        type="switch"
-                        id="custom-switch"
-                        label="Vacant"
-                        value={companyData.isVacant}
-                        onChange={(e) => {
-                          dispatchInputChange({
-                            type: "isVacant",
-                            value: e.target.checked,
-                          });
-                        }}
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3 col-12" controlId="isCoT">
-                      <Form.Check // prettier-ignore
-                        type="switch"
-                        id="custom-switch"
-                        label="CoT"
-                        value={companyData.isCoT}
-                        onChange={(e) => {
-                          dispatchInputChange({
-                            type: "isCoT",
-                            value: e.target.checked,
-                          });
-                        }}
-                      />
-                    </Form.Group> */}
               </Tab>
               <Tab eventKey={1} title="Company Address">
                 <Form.Group
@@ -723,104 +465,10 @@ function EditCompany() {
                     }
                   />
                 </Form.Group>
-                {/* <SelectionBox
-                      groupclassName="mb-3 col-md-6 selectbox"
-                      groupId="supportContact"
-                      label="Support Contact"
-                      value={companyData.supportContact}
-                      onChange={handleSelectionChange.bind(
-                        null,
-                        "supportContact"
-                      )}
-                      name="supportContact"
-                      isSearch={true}
-                      objKey="username"
-                      url="sites/get/support_contact/"
-                    />
-
-                    <Form.Group className="mb-3 col-12" controlId="leadSource">
-                      <Form.Label>Lead Source</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="leadSource"
-                        value={companyData.leadSource}
-                        onChange={(e) =>
-                          dispatchInputChange({
-                            type: "leadSource",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3 col-12" controlId="notes">
-                      <Form.Label>Notes</Form.Label>
-                      <Form.Control
-                        type="textarea"
-                        name="notes"
-                        value={companyData.notes}
-                        onChange={(e) =>
-                          dispatchInputChange({
-                            type: "notes",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3 col-12" controlId="leadType">
-                      <Form.Label>Lead Type</Form.Label>
-                      <SelectSearch
-                        options={[
-                          { name: "GAS", value: "GAS" },
-                          { name: "ELECTRICITY", value: "ELECTRICITY" },
-                        ]}
-                        placeholder="Choose from options"
-                        value={companyData.leadType}
-                        onChange={(val) => {
-                          dispatchInputChange({
-                            type: "leadType",
-                            value: val,
-                          });
-                        }}
-                        name="leadType"
-                      />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3 col-12" controlId="billToSent">
-                      <Form.Check // prettier-ignore
-                        type="switch"
-                        id="custom-switch"
-                        value={companyData.billToSent}
-                        label="Bill to Sent"
-                        onChange={(e) => {
-                          dispatchInputChange({
-                            type: "billToSent",
-                            value: e.target.checked,
-                          });
-                        }}
-                      />
-                    </Form.Group>
-                    <Form.Group
-                      className="mb-3 col-12"
-                      controlId="welcomeLetterSent">
-                      <Form.Check // prettier-ignore
-                        type="switch"
-                        id="custom-switch"
-                        label="Welcome Letter Sent"
-                        value={companyData.welcomeLetterSent}
-                        onChange={(e) => {
-                          dispatchInputChange({
-                            type: "welcomeLetterSent",
-                            value: e.target.checked,
-                          });
-                        }}
-                      />
-                    </Form.Group> */}
               </Tab>
               <Tab eventKey={2} title="Bank Details">
                 <Form.Group className="mb-3 col-12" controlId="accountName">
-                  <Form.Label>Account name</Form.Label>
+                  <Form.Label>Account Name</Form.Label>
                   <Form.Control
                     type="text"
                     name="accountName"
@@ -834,7 +482,7 @@ function EditCompany() {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3 col-12" controlId="bankName">
-                  <Form.Label>Bank name</Form.Label>
+                  <Form.Label>Bank Name</Form.Label>
                   <Form.Control
                     type="text"
                     name="bankName"
@@ -848,7 +496,7 @@ function EditCompany() {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3 col-12" controlId="accountNo">
-                  <Form.Label>Account no</Form.Label>
+                  <Form.Label>Account No</Form.Label>
                   <Form.Control
                     type="text"
                     name="accountNo"
@@ -875,55 +523,10 @@ function EditCompany() {
                     }
                   />
                 </Form.Group>
-                {/* <Form.Group className="mb-3 " controlId="creditScore">
-                      <Form.Label>Credit Score</Form.Label>
-                      <Form.Control
-                        type="number"
-                        name="creditScore"
-                        value={companyData.creditScore}
-                        onChange={(e) =>
-                          dispatchInputChange({
-                            type: "creditScore",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group> */}
-                {/* <Form.Group
-                      className="mb-3 col-12"
-                      controlId="loaHeaderToUse">
-                      <Form.Label>LOA Header to Use</Form.Label>
-                      <SelectSearch
-                        options={[
-                          { name: "Site Name", value: "GAS" },
-                          { name: "Company Name", value: "ELECTRICITY" },
-                        ]}
-                        placeholder="Choose from options"
-                        value={companyData.loaHeaderToUse}
-                        onChange={(val) => {
-                          dispatchInputChange({
-                            type: "loaHeaderToUse",
-                            value: val,
-                          });
-                        }}
-                        name="loaHeaderToUse"
-                      />
-                    </Form.Group>
-                    <SelectionBox
-                      groupclassName="mb-3 col-md-6 selectbox"
-                      groupId="loaTemplate"
-                      label="LOA Template"
-                      value={companyData.loaTemplate}
-                      onChange={handleSelectionChange.bind(null, "loaTemplate")}
-                      name="loaTemplate"
-                      isSearch={true}
-                      objKey="name"
-                      url="sites/get/loa_template/"
-                    /> */}
               </Tab>
               <Tab eventKey={3} title="Partner Details">
                 <Form.Group className="mb-3 col-12" controlId="partnerName">
-                  <Form.Label>Partner name</Form.Label>
+                  <Form.Label>Partner Name</Form.Label>
                   <Form.Control
                     type="text"
                     name="partnerName"
@@ -937,7 +540,7 @@ function EditCompany() {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3 col-12" controlId="partnerDob">
-                  <Form.Label>Partner dob</Form.Label>
+                  <Form.Label>Partner DOB</Form.Label>
                   <Form.Control
                     type="date"
                     name="partnerDob"
@@ -965,9 +568,8 @@ function EditCompany() {
                     }
                   />
                 </Form.Group>
-
                 <Form.Group className="mb-3 col-12" controlId="homePostCode">
-                  <Form.Label>Home post code</Form.Label>
+                  <Form.Label>Home Postcode</Form.Label>
                   <Form.Control
                     type="text"
                     name="homePostCode"
@@ -984,7 +586,7 @@ function EditCompany() {
                   className="mb-3 col-12"
                   controlId="timeAtAddressYears"
                 >
-                  <Form.Label>Time At Address(years)</Form.Label>
+                  <Form.Label>Time At Address (Years)</Form.Label>
                   <Form.Control
                     type="number"
                     name="timeAtAddressYears"
@@ -1001,7 +603,7 @@ function EditCompany() {
                   className="mb-3 col-12"
                   controlId="timeAtAddressMonths"
                 >
-                  <Form.Label>Time At Address(months)</Form.Label>
+                  <Form.Label>Time At Address (Months)</Form.Label>
                   <Form.Control
                     type="number"
                     name="timeAtAddressMonths"
@@ -1014,40 +616,10 @@ function EditCompany() {
                     }
                   />
                 </Form.Group>
-                {/* <Form.Group className="mb-3 col-12" controlId="siteCountry">
-                      <Form.Label>Country</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="siteCountry"
-                        value={companyData.siteCountry}
-                        onChange={(e) =>
-                          dispatchInputChange({
-                            type: "siteCountry",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group> */}
               </Tab>
               <Tab eventKey={4} title="Contacts ">
-                {/* <Form.Group
-                      className="mb-3 col-12"
-                      controlId="isBillingSiteSame">
-                      <Form.Check // prettier-ignore
-                        type="switch"
-                        id="custom-switch"
-                        value={companyData.isBillingSiteSame}
-                        label="Is Billing Address Same As Site Address?"
-                        onChange={(e) => {
-                          dispatchInputChange({
-                            type: "isBillingSiteSame",
-                            value: e.target.checked,
-                          });
-                        }}
-                      />
-                    </Form.Group> */}
                 <Form.Group className="mb-3 col-12" controlId="firstName">
-                  <Form.Label>First name</Form.Label>
+                  <Form.Label>First Name</Form.Label>
                   <Form.Control
                     type="text"
                     name="firstName"
@@ -1061,7 +633,7 @@ function EditCompany() {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3 col-12" controlId="lastName">
-                  <Form.Label>Last name</Form.Label>
+                  <Form.Label>Last Name</Form.Label>
                   <Form.Control
                     type="text"
                     name="lastName"
@@ -1112,7 +684,7 @@ function EditCompany() {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3 col-12" controlId="telephoneNumber">
-                  <Form.Label>Telephone number </Form.Label>
+                  <Form.Label>Telephone Number </Form.Label>
                   <Form.Control
                     type="number"
                     name="telephoneNumber"
@@ -1140,104 +712,6 @@ function EditCompany() {
                   />
                 </Form.Group>
               </Tab>
-              {/* <Tab eventKey={5} title="Contact">
-                    <Form.Group className="mb-3 col-12" controlId="firstName">
-                      <Form.Label>First Name</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="firstName"
-                        value={companyData.firstName}
-                        onChange={(e) =>
-                          dispatchInputChange({
-                            type: "firstName",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3 col-12" controlId="lastName">
-                      <Form.Label>Last Name</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="lastName"
-                        value={companyData.lastName}
-                        onChange={(e) =>
-                          dispatchInputChange({
-                            type: "lastName",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group>
-                    <Form.Group
-                      className="mb-3 col-12"
-                      controlId="contactTitle">
-                      <Form.Label>Contact Title</Form.Label>
-                      <SelectSearch
-                        options={[
-                          { name: "Sir", value: "Sir" },
-                          { name: "Mr", value: "Mr" },
-                          { name: "Ms", value: "Ms" },
-                          { name: "Mrs", value: "Mrs" },
-                          { name: "Miss", value: "Miss" },
-                          { name: "Dr", value: "Dr" },
-                        ]}
-                        placeholder="Choose from options"
-                        value={companyData.contactTitle}
-                        onChange={(val) => {
-                          dispatchInputChange({
-                            type: "contactTitle",
-                            value: val,
-                          });
-                        }}
-                        name="contactTitle"
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3 col-12" controlId="positon">
-                      <Form.Label>Positon</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="positon"
-                        value={companyData.positon}
-                        onChange={(e) =>
-                          dispatchInputChange({
-                            type: "positon",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group>
-                    <Form.Group
-                      className="mb-3 col-12"
-                      controlId="telephoneNumber">
-                      <Form.Label>Telephone Number</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="telephoneNumber"
-                        value={companyData.telephoneNumber}
-                        onChange={(e) =>
-                          dispatchInputChange({
-                            type: "telephoneNumber",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3 col-12" controlId="email">
-                      <Form.Label>Email</Form.Label>
-                      <Form.Control
-                        type="email"
-                        name="email"
-                        value={companyData.email}
-                        onChange={(e) =>
-                          dispatchInputChange({
-                            type: "email",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group>
-                  </Tab> */}
             </Tabs>
             <div className="col-md-12 centerBtn">
               {key === 0 ? (
@@ -1264,11 +738,6 @@ function EditCompany() {
                 </Button>
               )}
             </div>
-            {/* {formState.error ? (
-                  <p className="red">{formState.error}</p>
-                ) : (
-                  ""
-                )} */}
           </Form>
         </div>
       </NeumorphismWrapper>

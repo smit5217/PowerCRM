@@ -7,24 +7,25 @@ import UiModal from "../../components/UI/UiModal";
 import SitesDT from "../../components/Group Sites/SitesDT";
 
 function GroupQuote() {
-  const [showSiteForm, SetShowSiteForm] = useState(false);
   const [refreshTable, setRefreshTable] = useState(true);
+
   const [showSites, SetShowSites] = useState({
     total: null,
     show: false,
     sites: [],
     groupId: "",
   });
+
   const DTableFunction = function (data) {
-    // console.log(data);
     return data;
   };
+
   const columns = [
     {
       cell: (row) => (
         <>
           <Link
-            to={`/group-quote/edit/${row.id}`}
+            to={`/group-quotes/edit/${row.id}`}
             className="enquiryAction"
             title="Edit Group Quote"
           >
@@ -53,17 +54,7 @@ function GroupQuote() {
     {
       name: "Group Details",
       selector: (row) => (
-        <span
-          className="cursorPointer"
-          // onClick={() =>
-          //   SetShowSites({
-          //     total: row.group_detail?.length,
-          //     show: true,
-          //     sites: row.group_detail,
-          //     groupId: row.id,
-          //   })
-          // }
-        >
+        <span className="cursorPointer">
           {row.group_detail?.reduce((acc, data, id, arr) => {
             let addition = "";
             if (!(id === 0 || id === arr?.length - 1)) {
@@ -83,6 +74,7 @@ function GroupQuote() {
     SetShowSites({ total: null, show: false, sites: [], groupId: "" });
 
   const [cols, setCols, changeCols, renderColBtns] = useDTColumns(columns);
+  
   return (
     <>
       <NeumorphismWrapper>

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import SelectionBox from "../Form/SelectionBox";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SelectSearch from "react-select-search";
 import useFetch from "../../hooks/useFetch";
 import LoadingData from "../UI/LoadingData";
@@ -16,10 +15,6 @@ function GroupSiteForm(props) {
   });
   const groupSiteId = useParams().groupSiteId;
   const navigate = useNavigate();
-  // const [reqStatus, setReqStatus] = useState({
-  //   isLoading: false,
-  //   err: "",
-  // });
   const [err, setErr] = useState("");
   const [msg, setMsg] = useState("");
   const occurance = useRef(1);
@@ -40,10 +35,7 @@ function GroupSiteForm(props) {
   ] = useFetch();
 
   useEffect(() => {
-    // mean we got data now
     if (responseGetcompanyData) {
-      console.log("in responseGetcompanyData", occurance.current);
-      console.log(responseGetcompanyData);
       occurance.current += 1;
       setFormData({
         gName: responseGetcompanyData?.data?.group_name,
@@ -156,7 +148,7 @@ function GroupSiteForm(props) {
         <Form onSubmit={createGroupSite}>
           <div className="row">
             <Form.Group className="mb-3 col-md-4" controlId="stuName">
-              <Form.Label>Group name</Form.Label>
+              <Form.Label>Group Name</Form.Label>
               <Form.Control
                 type="text"
                 name="stuName"
@@ -175,13 +167,11 @@ function GroupSiteForm(props) {
               multiple={true}
               value={formData.sites}
               onSelect={(val) => {
-                console.log(val);
                 setFormData((prev) => {
                   return { ...prev, sites: val };
                 });
               }}
               onRemove={(val) => {
-                console.log(val);
                 setFormData((prev) => {
                   return { ...prev, sites: val };
                 });
@@ -191,29 +181,12 @@ function GroupSiteForm(props) {
               objKey={["site_name"]}
               url="sites/get/site/?brief=True"
             />
-            {/* <SelectionBox
-              groupClass="mb-3 col-md-4 selectbox"
-              groupId="parentCompany"
-              label="Sites"
-              multiple={true}
-              value={formData.sites}
-              onChange={(val) => {
-                console.log(val);
-                setFormData((prev) => {
-                  return { ...prev, sites: val };
-                });
-              }}
-              name="parentCompany"
-              isSearch={true}
-              objKey="site_name"
-              url="sites/get/site/?brief=True"
-            /> */}
             <Form.Group
               className={"mb-3 col-md-4 selectbox"}
               controlId={"companyName"}
             >
               <Form.Label className="text-center itsBlock">
-                Group type
+                Group Type
               </Form.Label>
               <SelectSearch
                 options={[

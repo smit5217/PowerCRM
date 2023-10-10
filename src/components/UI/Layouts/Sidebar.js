@@ -1,17 +1,17 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import uiAction from "../../../store/uiStore";
 import CollapsableComponent from "../CollapsableComponent";
-import enqSvg from "../../../assets/img/enquiry.svg";
 import { authAction } from "../../../store/authStore";
 import { deleteFromLocalStorage } from "../../../helpers/helperFunctions";
+
 function NavBar(props) {
-  const uiData = useSelector((state) => state.uiStore);
+  
   const dispatch = useDispatch();
   const locaton = useLocation();
   const navigate = useNavigate();
+
   const logout = () => {
     dispatch(
       authAction.setAuthStatus({
@@ -35,11 +35,6 @@ function NavBar(props) {
           <div className="nav-logo">
             <div className="nav-item theme-text">
               <NavLink to="/">
-                {/* <img
-                  src="https://www.oecindia.com/assets/images/finalpic.png"
-                  className="navbar-logo"
-                  alt="logo"
-                /> */}
                 PowerCRM
               </NavLink>
             </div>
@@ -65,8 +60,6 @@ function NavBar(props) {
             </div>
           </div>
         </div>
-
-        {/* <div className="shadow-bottom"></div> */}
         <ul className="list-unstyled menu-categories" id="accordionExample">
           <li className={`menu ${locaton.pathname === "/" ? "active" : ""}`}>
             <NavLink to="/" className="dropdown-toggle">
@@ -107,7 +100,6 @@ function NavBar(props) {
               <span>Company</span>
             </div>
           </li>
-
           <CollapsableComponent
             svg={
               <svg
@@ -128,7 +120,6 @@ function NavBar(props) {
             name="Company"
             subMenu={[
               { name: "Companies", link: "/companies" },
-              // { name: "Create Enquiry", link: "/enquiry/create" },
             ]}
           />
           <li className="menu menu-heading">
@@ -149,7 +140,6 @@ function NavBar(props) {
               <span>Sites</span>
             </div>
           </li>
-
           <CollapsableComponent
             svg={
               <svg
@@ -170,7 +160,6 @@ function NavBar(props) {
             name="Sites"
             subMenu={[
               { name: "Sites", link: "/sites" },
-              // { name: "Create Enquiry", link: "/enquiry/create" },
             ]}
           />
         </ul>

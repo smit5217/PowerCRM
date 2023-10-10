@@ -1,19 +1,12 @@
 import React, { useState } from "react";
 import CreateSite from "../../components/Sites/CreateSite";
-import { Button } from "react-bootstrap";
-import UiModal from "../../components/UI/UiModal";
 import DTable from "../../components/DTable";
 import { Link } from "react-router-dom";
 import useDTColumns from "../../hooks/useDTColumns";
 import NeumorphismWrapper from "../../components/UI/Layouts/NeumorphismWrapper";
 
 function Site() {
-  // state and reducers
-  const [showSiteForm, SetShowSiteForm] = useState(false);
-
-  // to refresh table
   const [refreshTable, setRefreshTable] = useState(true);
-  const hideModal = () => SetShowSiteForm(false);
 
   const columns = [
     {
@@ -58,7 +51,7 @@ function Site() {
       ),
     },
     {
-      name: "Type of Owner",
+      name: "Type Of Owner",
       selector: (row) => row.type_of_owner,
     },
     {
@@ -75,11 +68,11 @@ function Site() {
       selector: (row) => row.agent_email,
     },
     {
-      name: "Bill to sent",
+      name: "Bill To sent",
       selector: (row) => (row.bill_to_sent ? "YES" : "NO"),
     },
     {
-      name: "Change of Tenancy",
+      name: "Change Of Tenancy",
       selector: (row) => (row.change_of_tenancy ? "YES" : "NO"),
     },
     {
@@ -91,30 +84,14 @@ function Site() {
       selector: (row) => row.notes,
     },
   ];
+
   const [cols, setCols, changeCols, renderColBtns] = useDTColumns(columns);
+  
   const DTableFunction = function (data) {
     return data;
   };
   return (
     <>
-      {/* <Button
-        className="mb-3"
-        onClick={() => SetShowSiteForm((state) => !state)}>
-        Add Site
-      </Button>
-      {showSiteForm ? (
-        <UiModal
-          showStatus={showSiteForm}
-          setModalStatus={hideModal}
-          showHeader={true}
-          title="Add Site"
-          body={
-            <CreateSite hideModal={hideModal} refreshTable={setRefreshTable} />
-          }
-        />
-      ) : (
-        ""
-      )} */}
       <CreateSite siteCreated={() => {}} setRefreshTable={setRefreshTable} />
       <NeumorphismWrapper>
         {renderColBtns()}

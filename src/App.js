@@ -1,21 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-// import "./assets/css/auth-boxed.css";
-// import "./assets/css/main.css";
-// import "./assets/css/dash_1.css";
-// import "./assets/css/perfect-scrollbar.css";
-// import "./assets/css/structure.css";
-// import "./assets/css/waves.min.css";
 import "./assets/css/custom.css";
 import "./assets/css/neumorphism.css";
 import {
   createBrowserRouter,
-  Navigate,
   RouterProvider,
-  useNavigate,
 } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Base from "./components/Base";
-import AuthRoot from "./components/AuthRoot";
 import ErrorBoundary from "./components/ErrorBoundry";
 import Site from "./pages/Sites";
 import EditSite from "./components/Sites/EditSite";
@@ -105,7 +96,7 @@ const router = createBrowserRouter(
           element: <AddGroupQuote />,
         },
         {
-          path: "group-quote/edit/:quoteId",
+          path: "group-quotes/edit/:quoteId",
           element: <EditGroupQuote />,
         },
       ],
@@ -119,7 +110,6 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  // const navigate = useNavigate();
   return (
     <>
       <ErrorBoundary>

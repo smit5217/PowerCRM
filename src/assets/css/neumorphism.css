@@ -2182,11 +2182,11 @@ textarea.form-control {
   padding-right: 5px;
   padding-left: 5px;
 }
-.form-check {
+/* .form-check {
   position: relative;
   display: block;
   padding-left: 1.25rem;
-}
+} */
 .form-check-input {
   position: absolute;
   margin-top: 0.3rem;
@@ -26267,9 +26267,9 @@ textarea[resize="horizontal"] {
 .has-success .form-control::placeholder {
   color: #18634b;
 }
-.form-check {
+/* .form-check {
   padding-left: 0;
-}
+} */
 .form-check-input:disabled ~ .form-check-label {
   color: #525480;
 }

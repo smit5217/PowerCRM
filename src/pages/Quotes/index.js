@@ -5,12 +5,13 @@ import useDTColumns from "../../hooks/useDTColumns";
 import NeumorphismWrapper from "../../components/UI/Layouts/NeumorphismWrapper";
 
 function Quote() {
-  const [showSiteForm, SetShowSiteForm] = useState(false);
+
   const [refreshTable, setRefreshTable] = useState(true);
+
   const DTableFunction = function (data) {
-    // console.log(data);
     return data;
   };
+  
   const columns = [
     {
       cell: (row) => (
@@ -60,19 +61,19 @@ function Quote() {
       selector: (row) => row.term,
     },
     {
-      name: "Day Rate(pence/kwh)",
+      name: "Day Rate (pence/kwh)",
       selector: (row) => row.day_rate,
     },
     {
-      name: "Night Rate(pence/kwh)",
+      name: "Night Rate (pence/kwh)",
       selector: (row) => row.night_rate,
     },
     {
-      name: "Standing Charge(pence)",
+      name: "Standing Charge (pence)",
       selector: (row) => row.standing_charge,
     },
     {
-      name: "KVA Charge(pence)",
+      name: "KVA Charge (pence)",
       selector: (row) => row.kva_charge,
     },
 
@@ -89,11 +90,13 @@ function Quote() {
       selector: (row) => row.up_lift,
     },
     {
-      name: "Rates already include at uplift",
+      name: "Rates Already Include At Uplift",
       selector: (row) => (row.rates_already_include_at_uplift ? "YES" : "NO"),
     },
   ];
+
   const [cols, setCols, changeCols, renderColBtns] = useDTColumns(columns);
+
   return (
     <>
       <NeumorphismWrapper>

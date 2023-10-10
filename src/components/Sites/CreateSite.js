@@ -2,16 +2,15 @@ import React, { useEffect, useReducer, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import SelectionBox from "../Form/SelectionBox";
 import useFetch from "../../hooks/useFetch";
-import useUiAction from "../../hooks/useUiAction";
 import { uiAction } from "../../store/uiStore";
 import { useDispatch } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import NeumorphismWrapper from "../UI/Layouts/NeumorphismWrapper";
 
 const reducerSite = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
+
 function CreateSite(props) {
   const initialSiteDetails = {
     parentCompany: "",
@@ -19,21 +18,16 @@ function CreateSite(props) {
     companyName: "",
     reference: "",
     groupName: props.groupId || "",
-    // typeOfOwner: "",
-    // ownerName: "",
-    // currentGasElectDetails: "",
   };
-  // state and reducers
+
   const [siteData, dispatchSiteData] = useReducer(
     reducerSite,
     initialSiteDetails
   );
   const [err, setErr] = useState("");
 
-  // store dispatch
   const dispatch = useDispatch();
 
-  //   custom hook for ajax calls
   const [
     sendReqData,
     setSendReqData,
@@ -42,13 +36,10 @@ function CreateSite(props) {
     setResponseData,
   ] = useFetch();
 
-  // for selectionbox value
   const handleChange = (fileName, file) => {
-    // console.log(fileName, file);
     dispatchSiteData({ type: fileName, value: file });
   };
 
-  // create site
   const createSite = async function (e) {
     e.preventDefault();
 
@@ -62,13 +53,8 @@ function CreateSite(props) {
       setErr("");
     }
     let body = {
-      // parent_company: siteData.parentCompany,
       site_name: siteData.siteName,
       company: siteData.companyName,
-      // type_of_owner: siteData.typeOfOwner,
-      // owner_name: siteData.ownerName,
-      // current_gas_and_electricity_supplier_details:
-      //   siteData.currentGasElectDetails,
     };
     if (siteData.groupName) {
       body.group_site = siteData.groupName;
@@ -89,7 +75,6 @@ function CreateSite(props) {
     });
   };
 
-  // when we get response lets close the modal and show them success msg
   useEffect(() => {
     if (responseData) {
       dispatch(
@@ -106,36 +91,9 @@ function CreateSite(props) {
 
   return (
     <div id="tabsSimple" className="col-xl-12 col-12 layout-spacing">
-      {/* <div className="neumorphism-box"> */}
       <NeumorphismWrapper>
         <Form onSubmit={createSite}>
           <div className="row">
-            {/* <Form.Group className="mb-3 col-md-3" controlId="reference">
-                <Form.Label>Parent Company</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="parentCompany"
-                  value={siteData.parentCompany}
-                  onChange={(e) =>
-                    dispatchSiteData({
-                      type: "parentCompany",
-                      value: e.target.value,
-                    })
-                  }
-                />
-              </Form.Group> */}
-
-            {/* <SelectionBox
-                groupClass="mb-3 col-md-3 selectbox"
-                groupId="parentCompany"
-                label="Parent Name"
-                value={siteData.parentCompany}
-                onChange={handleChange.bind(null, "parentCompany")}
-                name="parentCompany"
-                isSearch={true}
-                objKey="name"
-                url="sites/get/company_name/"
-              /> */}
             <Form.Group className="mb-3 col-md-3" controlId="stuName">
               <Form.Label>Site Name</Form.Label>
               <Form.Control
@@ -184,19 +142,6 @@ function CreateSite(props) {
               objKey="name"
               url="sites/get/company_name/"
             />
-            {/* <div className="col-md-1">
-               
-              </div> */}
-            {/* <Form.Group className="mb-3 col-md-1">
-                {" "}
-                <Form.Label>Company Not in List?</Form.Label>
-                <Link to="/companies" className="btn btn-primary">
-                  {/* <i class="fa-solid fa-plus"></i> 
-                  <FontAwesomeIcon icon="fa-solid fa-plus" size="xs" />
-                  Add company
-                </Link>
-              </Form.Group> */}
-
             <Form.Group className="mb-3 col-md-3" controlId="reference">
               <Form.Label>Reference</Form.Label>
               <Form.Control
@@ -211,7 +156,6 @@ function CreateSite(props) {
                 }
               />
             </Form.Group>
-
             <SelectionBox
               groupClass="mb-3 col-md-3 selectbox"
               groupId="groupName"
@@ -223,51 +167,6 @@ function CreateSite(props) {
               objKey="group_name"
               url="multisite/multisitelist/"
             />
-
-            {/* <Form.Group className="mb-3 col-md-3" controlId="stuName">
-                    <Form.Label>Type Of Owner</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="stuName"
-                      value={siteData.typeOfOwner}
-                      onChange={(e) =>
-                        dispatchSiteData({
-                          type: "typeOfOwner",
-                          value: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3 col-md-3" controlId="stuName">
-                    <Form.Label>Owner Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="stuName"
-                      value={siteData.ownerName}
-                      onChange={(e) =>
-                        dispatchSiteData({
-                          type: "ownerName",
-                          value: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3 col-md-3" controlId="stuName">
-                    <Form.Label>
-                      Current gas and electricity supplier details
-                    </Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="stuName"
-                      value={siteData.currentGasElectDetails}
-                      onChange={(e) =>
-                        dispatchSiteData({
-                          type: "currentGasElectDetails",
-                          value: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group> */}
             <div className="col-md-12 text-center">
               {err?.length ? <p className="dengor">{err}</p> : ""}
               <Button
@@ -281,8 +180,6 @@ function CreateSite(props) {
           </div>
         </Form>
       </NeumorphismWrapper>
-
-      {/* </div> */}
     </div>
   );
 }
