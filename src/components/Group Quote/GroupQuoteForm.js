@@ -1,24 +1,25 @@
 import React, { useEffect, useReducer, useState } from "react";
 import NeumorphismWrapper from "../UI/Layouts/NeumorphismWrapper";
 import { Button, Form } from "react-bootstrap";
-import SelectionBox from "../Form/SelectionBox";
 import LoadingData from "../UI/LoadingData";
 import { uiAction } from "../../store/uiStore";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import { useDispatch } from "react-redux";
-import Multiselect from "multiselect-react-dropdown";
 import MultiSelectBox from "../UI/Form/MultiSelectBox";
+
 const initialSiteState = {
   groupName: "",
   groupSelect: [],
 };
+
 const QuoteReducer = (state, action) => {
   if (action?.all) {
     return action.data;
   }
   return { ...state, [action.type]: action.value };
 };
+
 function GroupQuoteForm(props) {
   const [quoteForm, dispatchInputChange] = useReducer(
     QuoteReducer,
@@ -44,14 +45,9 @@ function GroupQuoteForm(props) {
     responseGetcompanyData,
     setCompanyGetResponseData,
   ] = useFetch();
+
   const navigate = useNavigate();
-  // const [
-  //   companyGETData,
-  //   setCompanyGETData,
-  //   reqGetCompanyStatus,
-  //   responseGetcompanyData,
-  //   setCompanyGetResponseData,
-  // ] = useFetch();
+  
   const handleSelectionChange = function (value) {
     dispatchInputChange({ type: "groupSelect", value });
   };
@@ -70,6 +66,7 @@ function GroupQuoteForm(props) {
       group_detail: quoteForm.groupSelect?.map((data) => data.id),
       group_name: quoteForm.groupName,
     };
+
     setCompanyResponseData(null);
     let url = `quote/group-quote/`,
       method = "POST";
@@ -92,6 +89,7 @@ function GroupQuoteForm(props) {
       expectStatusCode: [200, 201],
     });
   };
+
   useEffect(() => {
     if (responsecompanyData) {
       if (
@@ -151,7 +149,6 @@ function GroupQuoteForm(props) {
           },
         });
       }
-      // console.log(responseGetcompanyData);
     }
   }, [props.quoteId, responseGetcompanyData]);
 
@@ -167,10 +164,9 @@ function GroupQuoteForm(props) {
       <div className="widget-header">
         <h4>{props.title}</h4>
       </div>
-
       <Form onSubmit={submitData} className="row">
         <Form.Group className="mb-3 col-6" controlId="supplier">
-          <Form.Label>Group name</Form.Label>
+          <Form.Label>Group Name</Form.Label>
           <Form.Control
             type="text"
             name="groupName"

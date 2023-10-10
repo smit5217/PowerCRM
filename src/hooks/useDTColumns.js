@@ -4,8 +4,8 @@ import { Button } from "react-bootstrap";
 function useDTColumns(column) {
   const [cols, setCols] = useState(column);
   const [showColFilter, setShowColFilter] = useState(false);
+
   useEffect(() => {
-    console.log(cols);
     if (cols.length) {
       setCols((col) => {
         return col.map((column) => {
@@ -17,6 +17,7 @@ function useDTColumns(column) {
       });
     }
   }, []);
+  
   const changeColState = function (id) {
     setCols((oldCols) => {
       const cols = [...oldCols];

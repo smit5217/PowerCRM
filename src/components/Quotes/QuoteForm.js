@@ -2,12 +2,13 @@ import React, { useEffect, useReducer, useState } from "react";
 import SelectionBox from "../Form/SelectionBox";
 import { Button, Form } from "react-bootstrap";
 import useFetch from "../../hooks/useFetch";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { uiAction } from "../../store/uiStore";
 import LoadingData from "../UI/LoadingData";
 import SiteDetails from "./SiteDetails";
 import NeumorphismWrapper from "../UI/Layouts/NeumorphismWrapper";
+
 const initialSiteState = {
   site: "",
   supplier: "",
@@ -22,12 +23,14 @@ const initialSiteState = {
   upLift: "",
   rateIncludedInUplift: false,
 };
+
 const QuoteReducer = (state, action) => {
   if (action?.all) {
     return action.data;
   }
   return { ...state, [action.type]: action.value };
 };
+
 function QuoteForm(props) {
   const [quoteForm, dispatchInputChange] = useReducer(
     QuoteReducer,
@@ -53,14 +56,9 @@ function QuoteForm(props) {
     responseGetcompanyData,
     setCompanyGetResponseData,
   ] = useFetch();
+
   const navigate = useNavigate();
-  // const [
-  //   companyGETData,
-  //   setCompanyGETData,
-  //   reqGetCompanyStatus,
-  //   responseGetcompanyData,
-  //   setCompanyGetResponseData,
-  // ] = useFetch();
+  
   const handleSelectionChange = function (type, value) {
     dispatchInputChange({ type, value });
   };
@@ -194,7 +192,6 @@ function QuoteForm(props) {
           },
         });
       }
-      // console.log(responseGetcompanyData);
     }
   }, [props.quoteId, responseGetcompanyData]);
 
@@ -267,7 +264,7 @@ function QuoteForm(props) {
               />
             </Form.Group>
             <Form.Group className="mb-3 col-6" controlId="dayRate">
-              <Form.Label>Day Rate(pence/kwh)</Form.Label>
+              <Form.Label>Day Rate (pence/kwh)</Form.Label>
               <Form.Control
                 type="number"
                 name="dayRate"
@@ -281,7 +278,7 @@ function QuoteForm(props) {
               />
             </Form.Group>
             <Form.Group className="mb-3 col-6" controlId="nightRate">
-              <Form.Label>Night Rate(pence/kwh)</Form.Label>
+              <Form.Label>Night Rate (pence/kwh)</Form.Label>
               <Form.Control
                 type="number"
                 name="nightRate"
@@ -295,7 +292,7 @@ function QuoteForm(props) {
               />
             </Form.Group>
             <Form.Group className="mb-3 col-6" controlId="standingCharge">
-              <Form.Label>Standing Charge(pence)</Form.Label>
+              <Form.Label>Standing Charge (pence)</Form.Label>
               <Form.Control
                 type="number"
                 name="standingCharge"
@@ -309,7 +306,7 @@ function QuoteForm(props) {
               />
             </Form.Group>
             <Form.Group className="mb-3 col-6" controlId="kvaCharge">
-              <Form.Label>KVA Charge(pence)</Form.Label>
+              <Form.Label>KVA Charge (pence)</Form.Label>
               <Form.Control
                 type="number"
                 name="kvaCharge"
@@ -365,10 +362,10 @@ function QuoteForm(props) {
               />
             </Form.Group>
             <Form.Group className="mb-3 col-6" controlId="name">
-              <Form.Check // prettier-ignore
+              <Form.Check
                 type="switch"
                 id="custom-switch"
-                label="Rates Already Include at uplift"
+                label="Rates Already Include At UpLift"
                 checked={quoteForm.rateIncludedInUplift}
                 onChange={(e) => {
                   dispatchInputChange({

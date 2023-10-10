@@ -16,10 +16,8 @@ function MultiSelectBox(props) {
     responseData,
     setResponseData,
   ] = useFetch();
-  console.log(props.value, options);
+
   const data = async () => {
-    console.log("so i have loading parent state", props.isEditLoading);
-    console.log("now id is", props.idVals);
     let url = props.url;
     if (props?.isNeed) {
       url = props.url + `${props.separator}${props.paramName}=${props.paramId}`;
@@ -35,7 +33,6 @@ function MultiSelectBox(props) {
     });
   };
   useEffect(() => {
-    // console.log("i am inside and url is", props.url);
     if (props?.isStatic) {
       setOptions(props?.cols);
       setIsLoading(false);
@@ -47,7 +44,6 @@ function MultiSelectBox(props) {
           ? data()
           : console.log("no need")
         : data();
-      // data();
     }
   }, [props.url, props.isEditLoading, props.isEdit]);
 
@@ -61,7 +57,6 @@ function MultiSelectBox(props) {
         });
         return { id: option.id, name };
       });
-      console.log("editing", props.isEdit);
       if (props.isEdit) {
         if (props.multiple) {
           const selectedObj = allObj.filter((obj) => {
@@ -70,20 +65,17 @@ function MultiSelectBox(props) {
             }
             return false;
           });
-          console.log("editing val", selectedObj);
           props.onEditchange(selectedObj);
         } else {
-          console.log(allObj);
           const selectedObj = allObj.filter((obj) => props.idVals === obj.id);
           props.onEditchange(selectedObj);
-          console.log("editing val", selectedObj);
         }
       }
       setOptions(allObj);
-
       setIsLoading(false);
     }
   }, [responseData]);
+  
   return (
     <Form.Group className={props.groupClass} controlId={props.groupId}>
       <Form.Label>{props.label}</Form.Label>

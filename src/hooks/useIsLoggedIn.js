@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getFromLocalStorage } from "../helpers/helperFunctions";
-import useAuthAction from "./useAuthAction";
 import { authAction } from "../store/authStore";
 import { useDispatch } from "react-redux";
 
@@ -14,7 +13,6 @@ function useIsLoggedIn() {
   useEffect(() => {
     // get localdata and if not available then logout and if available set it, then it will give us If session expired then
     const localData = getFromLocalStorage("loginInfo", true);
-    console.log("localdata i got is", localData);
     if (localData === -1) {
       setIsLoggedIn(false);
     } else {

@@ -1,19 +1,12 @@
 import React, { useState } from "react";
 import DTable from "../../components/DTable";
 import { Link } from "react-router-dom";
-import UiModal from "../../components/UI/UiModal";
-
-import { Button } from "react-bootstrap";
-// import CreateCompany from "../../components/Companies/CreateCompany";
 import CreateCompany from "../../components/Companies/CreateCompany";
 import useDTColumns from "../../hooks/useDTColumns";
 import NeumorphismWrapper from "../../components/UI/Layouts/NeumorphismWrapper";
-// import CreateSite from "../../components/Sites/CreateSite";
 
 function Companies() {
-  const [showSiteForm, SetShowSiteForm] = useState(false);
   const [refreshTable, setRefreshTable] = useState(true);
-  const hideModal = () => SetShowSiteForm(false);
   const columns = [
     {
       cell: (row) => (
@@ -59,11 +52,7 @@ function Companies() {
       sortable: true,
     },
     {
-      name: "Postcode",
-      selector: (row) => row.postcode,
-    },
-    {
-      name: "Number of employees",
+      name: "Number Of Employees",
       selector: (row) => row.number_of_employees,
     },
     {
@@ -71,7 +60,7 @@ function Companies() {
       selector: (row) => row.registration_no,
     },
     {
-      name: "Estimated turnover",
+      name: "Estimated Turnover",
       selector: (row) => row.estimated_turnover,
     },
     {
@@ -121,20 +110,12 @@ function Companies() {
       selector: (row) => (row.is_macro_business ? "YES" : "NO"),
     },
     {
-      name: "Home Postcode",
-      selector: (row) => row.home_post_code,
-    },
-    {
       name: "Partner Date of birth",
       selector: (row) => row.partner_dob,
     },
     {
       name: "Partner Name",
       selector: (row) => row.partner_name,
-    },
-    {
-      name: "Postcode",
-      selector: (row) => row.postcode,
     },
     {
       name: "Registration No",
@@ -148,42 +129,16 @@ function Companies() {
       name: "Postcode",
       selector: (row) => row.postcode,
     },
-    // {
-    //   name: "Credit Score",
-    //   selector: (row) => row.credit_score,
-    // },
   ];
 
   const [cols, setCols, changeCols, renderColBtns] = useDTColumns(columns);
-  console.log(cols);
+
   const DTableFunction = function (data) {
-    // console.log(data);
     return data;
   };
-  // console.log(DTableFunction);
+
   return (
     <>
-      {/* <Button
-        className="mb-3"
-        onClick={() => SetShowSiteForm((state) => !state)}>
-        Add Company
-      </Button>
-      {showSiteForm ? (
-        <UiModal
-          showStatus={showSiteForm}
-          setModalStatus={hideModal}
-          showHeader={true}
-          title="Add Company"
-          body={
-            <CreateCompany
-              hideModal={hideModal}
-              refreshTable={setRefreshTable}
-            />
-          }
-        />
-      ) : (
-        ""
-      )} */}
       <CreateCompany setRefreshTable={setRefreshTable} />
       <NeumorphismWrapper>
         <div className="col-lg-12 flex-col-btns"> {renderColBtns()}</div>

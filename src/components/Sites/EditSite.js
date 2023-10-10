@@ -57,17 +57,6 @@ const siteReducer = (state, action) => {
   if (action?.type === "update") {
     return action.data;
   }
-  // if (action?.type === "isBillingSiteSame") {
-  //   return {
-  //     ...state,
-  //     siteAddressLine1: state.billingAddressLine1,
-  //     siteAddressLine2: state.billingAddressLine2,
-  //     siteAddressLine3: state.billingAddressLine3,
-  //     siteAddressLine4: state.billingAddressLine4,
-  //     siteCountry: state.billingCountry,
-  //     sitePostCode: state.billingPostCode,
-  //   };
-  // }
   let returnedObj = { ...state, [action.type]: action.value };
   if (returnedObj.isBillingSiteSame) {
     returnedObj = {
@@ -83,33 +72,27 @@ const siteReducer = (state, action) => {
   return returnedObj;
 };
 
-// helper function for turnary
 const turnaryOperation = function (data) {
   return data ?? "";
 };
+
 function EditSite() {
-  // reducer
   const [siteData, dispatchInputChange] = useReducer(
     siteReducer,
     initialSiteState
   );
   const [formState, setFormState] = useState({
     error: "",
-    // submitting: false,
   });
 
-  // using useLocation for getting groupId and navigate to multi group page...
   const location = useLocation();
-  // const [isNext, setisNext] = useState(true);
-  // state for tabs
+
   const [key, setKey] = useState(0);
-  // navigate
+
   const navigate = useNavigate();
 
-  // getting parameter
   const paramsId = useParams().siteId;
 
-  // custom hook for sending data
   const [
     sendSiteData,
     setSiteReqData,
@@ -119,7 +102,6 @@ function EditSite() {
     setStatus,
   ] = useFetch();
 
-  // for getting data by id
   const [
     siteGETData,
     setSiteGETData,
@@ -128,7 +110,6 @@ function EditSite() {
     setSiteGetResponseData,
   ] = useFetch();
 
-  // useEffect to load the data
   useEffect(() => {
     if ((paramsId, !responseGetSiteData)) {
       setSiteGETData({
@@ -145,7 +126,6 @@ function EditSite() {
         expectStatusCode: [200, 201],
       });
     }
-    // mean we got data now
     if (responseGetSiteData) {
       const responseData = {
         groupName: turnaryOperation(responseGetSiteData.data.group_name),
@@ -350,17 +330,6 @@ function EditSite() {
     ) {
       sendData = { ...sendData, billing_address };
     }
-    // if (
-    //   siteData.firstName?.length < 1 ||
-    //   siteData.lastName?.length < 1 ||
-    //   siteData.contactTitle?.length < 1 ||
-    //   siteData.telephoneNumber?.length < 1 ||
-    //   siteData.email?.length < 1
-    // ) {
-    //   setFormState({ error: "Please fill all fields" });
-    // setisNext(false);
-    //   return;
-    // }
     setSiteResponseData(null);
     setStatus({ isLoading: true, isError: false });
     setSiteReqData({
@@ -379,7 +348,6 @@ function EditSite() {
     });
   };
   useEffect(() => {
-    // console.log(responsecompanyData.status);
     if (responseSiteData) {
       if (responseSiteData.status === 200 || responseSiteData.status === 201) {
         setFormState({ error: "" });
@@ -398,124 +366,10 @@ function EditSite() {
     return <LoadingData className="text-center" />;
   }
 
-  // const changeTab = function (isNext = true, sendSiteData) {
   const changeTab = function (isNext = true) {
     setKey((oldKey) => {
       return isNext ? oldKey + 1 : oldKey - 1;
     });
-    // switch (key) {
-    //   case 0:
-    //     if (
-    //       siteData.groupName?.length < 1 ||
-    //       siteData.parentCompany?.length < 1 ||
-    //       siteData.parentCompany?.length < 1 ||
-    //       siteData.siteName?.length < 1 ||
-    //       siteData.companyName?.length < 1 ||
-    //       siteData.typeOfOwner?.length < 1 ||
-    //       siteData.ownerName?.length < 1 ||
-    //       siteData.currentSupplier?.length < 1
-    //     ) {
-    //       setFormState({ error: "Please fill all fields" });
-    //       // setisNext(false);
-
-    //       return;
-    //     } else {
-    //       setFormState({ error: "" });
-    //       setKey((oldKey) => {
-    //         return isNext ? oldKey + 1 : oldKey - 1;
-    //       });
-    //     }
-    //     break;
-    //   case 1:
-    //     if (
-    //       siteData.siteReference?.length < 1 ||
-    //       siteData.supportContact?.length < 1 ||
-    //       siteData.leadType?.length < 1 ||
-    //       siteData.notes?.length < 1
-    //     ) {
-    //       setFormState({ error: "Please fill all fields" });
-    //       // setisNext(false);
-
-    //       return;
-    //     } else {
-    //       setFormState({ error: "" });
-    //       setKey((oldKey) => {
-    //         return isNext ? oldKey + 1 : oldKey - 1;
-    //       });
-    //     }
-    //     break;
-    //   case 2:
-    //     if (
-    //       siteData.agentEmail?.length < 1 ||
-    //       siteData.loaHeaderToUse?.length < 1 ||
-    //       siteData.loaTemplate?.length < 1
-    //     ) {
-    //       setFormState({ error: "Please fill all fields" });
-    //       // setisNext(false);
-
-    //       return;
-    //     } else {
-    //       setFormState({ error: "" });
-    //       setKey((oldKey) => {
-    //         return isNext ? oldKey + 1 : oldKey - 1;
-    //       });
-    //     }
-    //     break;
-    //   case 3:
-    //     if (
-    //       siteData.sitePostCode?.length < 1 ||
-    //       siteData.siteCountry?.length < 1 ||
-    //       siteData.siteAddressLine1?.length < 1
-    //     ) {
-    //       setFormState({ error: "Please fill all fields" });
-    //       // setisNext(false);
-
-    //       return;
-    //     } else {
-    //       setFormState({ error: "" });
-    //       setKey((oldKey) => {
-    //         return isNext ? oldKey + 1 : oldKey - 1;
-    //       });
-    //     }
-    //     break;
-    //   case 4:
-    //     if (
-    //       siteData.billingPostCode?.length < 1 ||
-    //       siteData.billingCountry?.length < 1 ||
-    //       siteData.billingAddressLine1?.length < 1
-    //     ) {
-    //       setFormState({ error: "Please fill all fields" });
-    //       // setisNext(false);
-    //       return;
-    //     } else {
-    //       setFormState({ error: "" });
-    //       setKey((oldKey) => {
-    //         return isNext ? oldKey + 1 : oldKey - 1;
-    //       });
-    //     }
-    //     break;
-    //   // case 5:
-    //   //   if (
-    //   //     siteData.firstName?.length < 1 ||
-    //   //     siteData.lastName?.length < 1 ||
-    //   //     siteData.contactTitle?.length < 1 ||
-    //   //     siteData.telephoneNumber?.length < 1 ||
-    //   //     siteData.email?.length < 1
-    //   //   ) {
-    //   //     setFormState({ error: "Please fill all fields" });
-    //   //     // setisNext(false);
-    //   //     return;
-    //   //   } else {
-    //   //     setFormState({ error: "" });
-    //   //     setKey((oldKey) => {
-    //   //       return isNext ? oldKey + 1 : oldKey - 1;
-    //   //     });
-    //   //   }
-    //   //   break;
-    //   default:
-    //     setFormState({ error: "" });
-    //     break;
-    // }
   };
 
   return (
@@ -545,20 +399,6 @@ function EditSite() {
                   objKey="group_name"
                   url="sites/groups/"
                 />
-                {/* <Form.Group className="mb-3 col-12" controlId="parentCompany">
-                    <Form.Label>Parent Company</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="parentCompany"
-                      value={siteData.parentCompany}
-                      onChange={(e) =>
-                        dispatchInputChange({
-                          type: "parentCompany",
-                          value: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group> */}
                 <Form.Group className="mb-3 col-12" controlId="siteName">
                   <Form.Label>Site Name</Form.Label>
                   <Form.Control
@@ -584,9 +424,8 @@ function EditSite() {
                   objKey="name"
                   url="sites/get/company_name/"
                 />
-
                 <Form.Group className="mb-3 col-12" controlId="typeOfOwner">
-                  <Form.Label>Type of owner</Form.Label>
+                  <Form.Label>Type Of Owner</Form.Label>
                   <Form.Control
                     type="text"
                     name="typeOfOwner"
@@ -615,7 +454,7 @@ function EditSite() {
                 </Form.Group>
                 <Form.Group className="mb-3 col-12" controlId="currentSupplier">
                   <Form.Label>
-                    Current gas and electricity supplier details
+                    Current Gas And Electricity Supplier Details
                   </Form.Label>
                   <Form.Control
                     type="text"
@@ -629,9 +468,8 @@ function EditSite() {
                     }
                   />
                 </Form.Group>
-
                 <Form.Group className="mb-3 col-12" controlId="isTenant">
-                  <Form.Check // prettier-ignore
+                  <Form.Check
                     type="switch"
                     id="custom-switch"
                     label="Tenant"
@@ -645,7 +483,7 @@ function EditSite() {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3 col-12" controlId="isVacant">
-                  <Form.Check // prettier-ignore
+                  <Form.Check
                     type="switch"
                     id="custom-switch"
                     label="Vacant"
@@ -659,10 +497,10 @@ function EditSite() {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3 col-12" controlId="isCoT">
-                  <Form.Check // prettier-ignore
+                  <Form.Check
                     type="switch"
                     id="custom-switch"
-                    label="CoT"
+                    label="COT"
                     checked={siteData.isCoT}
                     onChange={(e) => {
                       dispatchInputChange({
@@ -699,7 +537,6 @@ function EditSite() {
                   objKey="username"
                   url="sites/get/support_contact/"
                 />
-
                 <Form.Group className="mb-3 col-12" controlId="leadSource">
                   <Form.Label>Lead Source</Form.Label>
                   <Form.Control
@@ -714,7 +551,6 @@ function EditSite() {
                     }
                   />
                 </Form.Group>
-
                 <Form.Group className="mb-3 col-12" controlId="notes">
                   <Form.Label>Notes</Form.Label>
                   <Form.Control
@@ -729,7 +565,6 @@ function EditSite() {
                     }
                   />
                 </Form.Group>
-
                 <Form.Group className="mb-3 col-12" controlId="leadType">
                   <Form.Label>Lead Type</Form.Label>
                   <SelectSearch
@@ -748,9 +583,8 @@ function EditSite() {
                     name="leadType"
                   />
                 </Form.Group>
-
                 <Form.Group className="mb-3 col-12" controlId="billToSent">
-                  <Form.Check // prettier-ignore
+                  <Form.Check 
                     type="switch"
                     id="custom-switch"
                     checked={siteData.billToSent}
@@ -767,7 +601,7 @@ function EditSite() {
                   className="mb-3 col-12"
                   controlId="welcomeLetterSent"
                 >
-                  <Form.Check // prettier-ignore
+                  <Form.Check 
                     type="switch"
                     id="custom-switch"
                     label="Welcome Letter Sent"
@@ -797,7 +631,7 @@ function EditSite() {
                   />
                 </Form.Group>
                 <Form.Group className="mb-3 col-12" controlId="loaHeaderToUse">
-                  <Form.Label>LOA Header to Use</Form.Label>
+                  <Form.Label>LOA Header To Use</Form.Label>
                   <SelectSearch
                     options={[
                       { name: "Site Name", value: "GAS" },
@@ -929,7 +763,7 @@ function EditSite() {
                   className="mb-3 col-12"
                   controlId="isBillingSiteSame"
                 >
-                  <Form.Check // prettier-ignore
+                  <Form.Check 
                     type="switch"
                     id="custom-switch"
                     checked={siteData.isBillingSiteSame}
@@ -1157,7 +991,6 @@ function EditSite() {
                 </Button>
               )}
             </div>
-            {/* {formState.error ? <p className="red">{formState.error}</p> : ""} */}
           </Form>
         </div>
       </div>

@@ -1,15 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteFromLocalStorage,
-  getFromLocalStorage,
   setToLocalStorage,
 } from "../helpers/helperFunctions";
 import { authAction } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
 import { uiAction } from "../store/uiStore";
-import useUiAction from "./useUiAction";
-import useAuthAction from "./useAuthAction";
 
 // if isAuth needed then it will be added by useFetch just make it true
 const initialSendDataState = {
@@ -48,7 +45,6 @@ function useFetch() {
       `https://aumhealthresort.com/powercrmlatest/api/${url}`,
       fetchObj
     );
-    // console.log(request);
     let response = null;
     if (request.ok) {
       response = await request.json();
@@ -56,17 +52,13 @@ function useFetch() {
     return { status: request.status, data: response, isError: !request.ok };
   };
   const refreshAuthToken = async function () {
-    // console.log("inside and ", authData);
     if (!authData.refreshToken) {
       return;
     }
-    // console.log("passed refreshtoken");
-    // const localData = getFromLocalStorage("loginInfo", true);
     if (authData.logInOperation === 1) {
       // mean already refresh token thing started or token refreshed
       return;
     }
-    // console.log("passed login operations");
     const response = await fetchReq("token/refresh/", {
       headers: {
         // "Access-Control-Allow-Origin": "*",
@@ -78,7 +70,6 @@ function useFetch() {
         refresh: authData.refreshToken,
       }),
     });
-    // console.log(response);
     if (response.status === 200) {
       shouldRefreshToken = 1;
       const authDataObj = {
@@ -134,11 +125,9 @@ function useFetch() {
         };
       }
       const response = await fetchReq(sendData.url, metaInfo);
-      // console.log("resonse is", response);
       clearTimeout(id);
 
       if (response.status === 401 && shouldRefreshToken === 1) {
-        // console.log("in refresh token if");
         dispatch(
           uiAction.setNotification({
             show: true,
@@ -160,7 +149,6 @@ function useFetch() {
         return;
       }
       if (sendData.expectStatusCode.includes(response.status)) {
-        // setSendData(initialSendDataState);
         setResponse({
           status: response.status,
           isError: !response.ok,
@@ -194,36 +182,16 @@ function useFetch() {
   };
 
   useEffect(() => {
-    // console.log(
-    //   "inside useeffect and both are",
-    //   authData.logInOperation,
-    //   sendData.url,
-    //   shouldRefreshToken
-    // );
     // -1 mean doing nothing and 1 mean all set
     if (authData.logInOperation === 0 && shouldRefreshToken === -1) {
       // marking it false so only 1 instance will pass this test...
       shouldRefreshToken = 0;
-      // console.log(
-      //   "going for refresh and both are",
-      //   authData.logInOperation,
-      //   sendData.url,
-      //   shouldRefreshToken
-      // );
       refreshAuthToken();
     }
   }, [authData.logInOperation, shouldRefreshToken]);
 
   useEffect(() => {
-    console.log(
-      "in send url",
-      response,
-      status.isError,
-      authData.logInOperation,
-      sendData.url,
-      shouldRefreshToken
-    );
-    console.log("in 2 now it is", authData.logInOperation);
+    // console.log("in 2 now it is", authData.logInOperation);
     // 0 means trying to refresh token
     if (
       !response &&

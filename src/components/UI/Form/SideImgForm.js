@@ -33,7 +33,7 @@ function SideImgForm(props) {
       footerContent: (
         <>
           <button
-            class="btn btn-outline-dark mb-2 me-4"
+            className="btn btn-outline-dark mb-2 me-4"
             onClick={() => {
               window.open(props.afile);
             }}

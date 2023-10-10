@@ -4,7 +4,7 @@ import useFetch from "../../hooks/useFetch";
 
 function DashboardSite() {
   const [companyData, setCompanyData] = useState();
-  // custom hook for sending data
+
   const [
     companyGETData,
     setCompanyGETData,
@@ -12,10 +12,10 @@ function DashboardSite() {
     responseGetcompanyData,
     setCompanyGetResponseData,
   ] = useFetch();
+
   const paramsId = useParams().siteId;
+
   useEffect(() => {
-    // return;
-    // console.log(paramsId, responseGetcompanyData);
     if (paramsId && !responseGetcompanyData) {
       setCompanyGETData({
         ...companyGETData,
@@ -32,87 +32,99 @@ function DashboardSite() {
       });
     }
     if (responseGetcompanyData) {
-      // console.log(responseGetcompanyData);
       setCompanyData(responseGetcompanyData.data);
     }
-    // mean we got data now
   }, [paramsId, responseGetcompanyData]);
+
   return (
     <div className="col-xl-12 col-12 layout-spacing">
       <div className="statbox box box-shadow ">
         <div className="widget-content widget-content-area">
           <div className="text-center">
-            <h4>{companyData?.site_name} Site</h4>
+            <h4>{companyData?.site_name}</h4>
             <hr />
           </div>
           <div className="row">
             <div className="col-md-6">
               <div className="neumorphism-box">
                 <h5>Site Info</h5>
-                <p>Group Name : {companyData?.name}</p>
-                <p>Company Name : {companyData?.name}</p>
-                <p>Type of owner : {companyData?.name}</p>
-                <p>Owner Name : {companyData?.name}</p>
+                <p>Group Name : {companyData?.group_name}</p>
+                <p>Company Name : {companyData?.contacts?.company}</p>
+                <p>Type Of Owner : {companyData?.type_of_owner}</p>
+                <p>Owner Name : {companyData?.owner_name}</p>
                 <p>
-                  Current gas and electricity supplier details :{" "}
-                  {companyData?.name}
+                  Current Gas And Electricity Supplier Details :
+                  {companyData?.current_gas_and_electricity_supplier_details}
                 </p>
-                <p>Is Tenant? {companyData?.name}</p>
-                <p>Is Vacant? {companyData?.name}</p>
-                <p>Is CoT? {companyData?.name}</p>
+                <p>Tenant : {companyData?.tenant ? "Yes" : "No"} </p>
+                <p>Vacant : {companyData?.vacant ? "Yes" : "No"} </p>
+                <p>Change Of Tenancy : {companyData?.change_of_tenancy ? "Yes" : "No"} </p>
               </div>
             </div>
             <div className="col-md-6">
               <div className="neumorphism-box">
                 <h5>Our Details</h5>
-                <p>Site Reference {companyData?.name}</p>
-                <p>Support Contact {companyData?.name}</p>
-                <p>Lead Source {companyData?.name}</p>
-                <p>Notes {companyData?.name}</p>
-                <p>Lead Type {companyData?.name}</p>
-                <p>Bill to Sent {companyData?.name}</p>
-                <p>Welcome Letter Sent {companyData?.name}</p>
+                <p>Site Reference : {companyData?.site_reference}</p>
+                <p>Support Contact : {companyData?.support_contact}</p>
+                <p>Lead Source : {companyData?.lead_source}</p>
+                <p>Notes : {companyData?.notes}</p>
+                <p>Lead Type : {companyData?.lead_type}</p>
+                <p>Bill To Sent : {companyData?.bill_to_sent ? "Yes" : "No"} </p>
+                <p>
+                  Welcome Letter Sent :{' '}
+                  {companyData?.welcome_letter_send ? "Yes" : "No"}{" "}
+                </p>
               </div>
             </div>
             <div className="col-md-6">
               <div className="neumorphism-box">
                 <h5>Letter Of Authority</h5>
-                <p>Agent Email {companyData?.name}</p>
-                <p>LOA Header to Use {companyData?.name}</p>
-                <p>LOA Template {companyData?.name}</p>
+                <p>Agent Email : {companyData?.agent_email}</p>
+                <p>LOA Header To Use : {companyData?.loa_header_to_use}</p>
+                <p>LOA Template : {companyData?.loa_template}</p>
               </div>
             </div>
             <div className="col-md-6">
               <div className="neumorphism-box">
                 <h5>Site Address</h5>
-                <p>Postcode {companyData?.name}</p>
-                <p>Address Line 1 {companyData?.name}</p>
-                <p>Address Line 2 {companyData?.name}</p>
-                <p>Address Line 3{companyData?.name}</p>
-                <p>Address Line 4 {companyData?.name}</p>
-                <p>Country {companyData?.name}</p>
+                <p>Postcode : {companyData?.site_address?.postcode}</p>
+                <p>Address Line 1 : {companyData?.site_address?.addressline1}</p>
+                <p>Address Line 2 : {companyData?.site_address?.addressline2}</p>
+                <p>Address Line 3 : {companyData?.site_address?.addressline3}</p>
+                <p>Address Line 4 : {companyData?.site_address?.addressline4}</p>
+                <p>Country : {companyData?.site_address?.country}</p>
               </div>
             </div>
             <div className="col-md-6">
               <div className="neumorphism-box">
                 <h5>Billing Address</h5>
-                <p>Postcode {companyData?.name}</p>
-                <p>Address Line 1 {companyData?.name}</p>
-                <p>Address Line 2 {companyData?.name}</p>
-                <p>Address Line 3{companyData?.name}</p>
-                <p>Address Line 4 {companyData?.name}</p>
-                <p>Country {companyData?.name}</p>
+                <p>Postcode : {companyData?.billing_address?.postcode}</p>
+                <p>
+                  Address Line 1 : {companyData?.billing_address?.addressline1}
+                </p>
+                <p>
+                  Address Line 2 : {companyData?.billing_address?.addressline2}
+                </p>
+                <p>
+                  Address Line 3 : {companyData?.billing_address?.addressline3}
+                </p>
+                <p>
+                  Address Line 4 : {companyData?.billing_address?.addressline4}
+                </p>
+                <p>Country : {companyData?.billing_address?.country}</p>
               </div>
             </div>
             <div className="col-md-6">
               <div className="neumorphism-box">
                 <h5>Contact</h5>
-                <p>First Name {companyData?.name}</p>
-                <p>Last Name {companyData?.name}</p>
-                <p>Contact Title {companyData?.name}</p>
-                <p>Positon{companyData?.name}</p>
-                <p>Telephone Number {companyData?.name}</p>
-                <p>Email {companyData?.name}</p>
+                <p>First Name : {companyData?.contacts?.first_name}</p>
+                <p>Last Name : {companyData?.contacts?.last_name}</p>
+                <p>Contact Title : {companyData?.contacts?.contact_title}</p>
+                <p>Positon : {companyData?.contacts?.position}</p>
+                <p>
+                  Telephone Number : {companyData?.contacts?.telephone_number}
+                </p>
+                <p>Email : {companyData?.contacts?.email}</p>
               </div>
             </div>
           </div>
