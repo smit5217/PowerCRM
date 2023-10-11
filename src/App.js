@@ -92,7 +92,7 @@ const router = createBrowserRouter(
           element: <GroupQuote />,
         },
         {
-          path: "group-quote/add",
+          path: "group-quotes/add",
           element: <AddGroupQuote />,
         },
         {

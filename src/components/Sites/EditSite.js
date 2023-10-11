@@ -8,14 +8,14 @@ import LoadingData from "../UI/LoadingData";
 import NeumorphismWrapper from "../UI/Layouts/NeumorphismWrapper";
 
 const initialSiteState = {
-  groupName: "",
-  parentCompany: "",
   siteName: "",
   companyName: "",
+  reference: "",
+  groupName: "",
   typeOfOwner: "",
   ownerName: "",
   currentSupplier: "",
-  leadSource: "",
+  lead_source: "",
   isTenant: false,
   isVacant: false,
   isCoT: false,
@@ -27,7 +27,7 @@ const initialSiteState = {
   billToSent: "",
   welcomeLetterSent: "",
   agentEmail: "",
-  loaHeaderToUse: "",
+  loa_header_to_use: "",
   loaTemplate: "",
   billingAddressLine1: "",
   billingAddressLine2: "",
@@ -45,7 +45,7 @@ const initialSiteState = {
   firstName: "",
   lastName: "",
   contactTitle: "",
-  positon: "",
+  position: "",
   telephoneNumber: "",
   email: "",
 };
@@ -86,11 +86,8 @@ function EditSite() {
   });
 
   const location = useLocation();
-
   const [key, setKey] = useState(0);
-
   const navigate = useNavigate();
-
   const paramsId = useParams().siteId;
 
   const [
@@ -126,20 +123,20 @@ function EditSite() {
         expectStatusCode: [200, 201],
       });
     }
+    console.log("----responseGetSiteData---->", responseGetSiteData);
+    console.log("---siteData-->", siteData);
     if (responseGetSiteData) {
       const responseData = {
         groupName: turnaryOperation(responseGetSiteData.data.group_name),
-        parentCompany: turnaryOperation(
-          responseGetSiteData.data.parent_company
-        ),
         siteName: turnaryOperation(responseGetSiteData.data.site_name),
         companyName: turnaryOperation(responseGetSiteData.data.company),
+        reference: turnaryOperation(responseGetSiteData.data.reference),
         typeOfOwner: turnaryOperation(responseGetSiteData.data.type_of_owner),
         ownerName: turnaryOperation(responseGetSiteData.data.owner_name),
         currentSupplier: turnaryOperation(
           responseGetSiteData.data.current_gas_and_electricity_supplier_details
         ),
-        leadSource: turnaryOperation(responseGetSiteData.data.group_name),
+        lead_source: turnaryOperation(responseGetSiteData.data.lead_source),
         isTenant: turnaryOperation(responseGetSiteData.data.tenant),
         isVacant: turnaryOperation(responseGetSiteData.data.vacant),
         isCoT: turnaryOperation(responseGetSiteData.data.change_of_tenancy),
@@ -159,7 +156,7 @@ function EditSite() {
           responseGetSiteData.data.welcome_letter_send
         ),
         agentEmail: turnaryOperation(responseGetSiteData.data.agent_email),
-        loaHeaderToUse: turnaryOperation(
+        loa_header_to_use: turnaryOperation(
           responseGetSiteData.data.loa_header_to_use
         ),
         loaTemplate: turnaryOperation(responseGetSiteData.data.loa_template),
@@ -209,7 +206,7 @@ function EditSite() {
         contactTitle: turnaryOperation(
           responseGetSiteData.data.contacts?.contact_title
         ),
-        positon: turnaryOperation(responseGetSiteData.data.contacts?.positon),
+        position: turnaryOperation(responseGetSiteData.data.contacts?.position),
         telephoneNumber: turnaryOperation(
           responseGetSiteData.data.contacts?.telephone_number
         ),
@@ -222,24 +219,18 @@ function EditSite() {
     }
   }, [paramsId, responseGetSiteData]);
 
-  // for selection box changed
   const handleSelectionChange = (fileName, file) => {
-    // console.log(file);
     dispatchInputChange({ type: fileName, value: file });
   };
 
-  // edit site function
   const editSite = function (e) {
-    // console.log("here");
     e.preventDefault();
-    // console.log(key);
     let sendData = {
       group_name: siteData.groupName,
-      parent_company: siteData.parentCompany,
       site_name: siteData.siteName,
       company: siteData.companyName,
+      reference: siteData.reference,
       type_of_owner: siteData.typeOfOwner,
-
       current_gas_and_electricity_supplier_details: siteData.currentSupplier,
       tenant: siteData.isTenant,
       vacant: siteData.isVacant,
@@ -252,14 +243,13 @@ function EditSite() {
       bill_to_sent: siteData.billToSent,
       welcome_letter_send: siteData.welcomeLetterSent,
       agent_email: siteData.agentEmail,
-      loa_header_to_use: siteData.loaHeaderToUse,
+      loa_header_to_use: siteData.loa_header_to_use,
       loa_template: siteData.loaTemplate,
     };
-
     if (siteData.ownerName) {
       sendData.owner_name = siteData.ownerName;
     }
-    const billing_address = {
+    const billingAddress = {
       billing_address: {
         addressline1: siteData.billingAddressLine1,
         addressline2: siteData.billingAddressLine2,
@@ -270,17 +260,17 @@ function EditSite() {
       },
     };
     if (
-      siteData.billingAddressLine1 ||
-      siteData.billingAddressLine2 ||
-      siteData.billingAddressLine3 ||
-      siteData.billingAddressLine4 ||
-      siteData.billingCountry ||
-      siteData.billingPostCode
+      billingAddress.billing_address.addressline1 ||
+      billingAddress.billing_address.addressline2 ||
+      billingAddress.billing_address.addressline3 ||
+      billingAddress.billing_address.addressline4 ||
+      billingAddress.billing_address.country ||
+      billingAddress.billing_address.postcode
     ) {
-      sendData = { ...sendData, billing_address };
+      sendData = { ...sendData, ...billingAddress };
     }
 
-    const site_address = {
+    const siteAaddress = {
       site_address: {
         addressline1: siteData.siteAddressLine1,
         addressline2: siteData.siteAddressLine2,
@@ -291,44 +281,34 @@ function EditSite() {
       },
     };
     if (
-      siteData.siteAddressLine1 ||
-      siteData.siteAddressLine2 ||
-      siteData.siteAddressLine3 ||
-      siteData.siteAddressLine4 ||
-      siteData.siteCountry ||
-      siteData.sitePostCode
+      siteAaddress.site_address.addressline1 ||
+      siteAaddress.site_address.addressline2 ||
+      siteAaddress.site_address.addressline3 ||
+      siteAaddress.site_address.addressline4 ||
+      siteAaddress.site_address.country ||
+      siteAaddress.site_address.postcode
     ) {
-      sendData = { ...sendData, site_address };
+      sendData = { ...sendData, ...siteAaddress };
     }
-    const contacts = {
+    const contactsInfo = {
       contacts: {
         first_name: siteData.firstName,
         last_name: siteData.lastName,
         contact_title: siteData.contactTitle,
-        positon: siteData.positon,
+        position: siteData.position,
         telephone_number: siteData.telephoneNumber,
         email: siteData.email,
       },
     };
     if (
-      siteData.firstName ||
-      siteData.lastName ||
-      siteData.contactTitle ||
-      siteData.positon ||
-      siteData.telephoneNumber ||
-      siteData.email
+      contactsInfo.contacts.first_name ||
+      contactsInfo.contacts.last_name ||
+      contactsInfo.contacts.contact_title ||
+      contactsInfo.contacts.position ||
+      contactsInfo.contacts.telephone_number ||
+      contactsInfo.contacts.email
     ) {
-      sendData = { ...sendData, contacts };
-    }
-    if (
-      siteData.billingAddressLine1 ||
-      siteData.billingAddressLine2 ||
-      siteData.billingAddressLine3 ||
-      siteData.billingAddressLine4 ||
-      siteData.billingCountry ||
-      siteData.billingPostCode
-    ) {
-      sendData = { ...sendData, billing_address };
+      sendData = { ...sendData, ...contactsInfo };
     }
     setSiteResponseData(null);
     setStatus({ isLoading: true, isError: false });
@@ -362,6 +342,7 @@ function EditSite() {
       }
     }
   }, [responseSiteData]);
+
   if (reqGetSiteStatus.isLoading) {
     return <LoadingData className="text-center" />;
   }
@@ -388,17 +369,6 @@ function EditSite() {
               className="mb-3"
             >
               <Tab eventKey={0} title="Site Info">
-                <SelectionBox
-                  groupClass="mb-3 col-md-6 selectbox"
-                  groupId="groupName"
-                  label="Group Name"
-                  value={siteData.groupName}
-                  onChange={handleSelectionChange.bind(null, "groupName")}
-                  name="groupName"
-                  isSearch={true}
-                  objKey="group_name"
-                  url="sites/groups/"
-                />
                 <Form.Group className="mb-3 col-12" controlId="siteName">
                   <Form.Label>Site Name</Form.Label>
                   <Form.Control
@@ -423,6 +393,31 @@ function EditSite() {
                   isSearch={true}
                   objKey="name"
                   url="sites/get/company_name/"
+                />
+                <Form.Group className="mb-3 col-12" controlId="reference">
+                  <Form.Label>Reference</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="reference"
+                    value={siteData.reference}
+                    onChange={(e) =>
+                      dispatchInputChange({
+                        type: "reference",
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </Form.Group>
+                <SelectionBox
+                  groupClass="mb-3 col-md-6 selectbox"
+                  groupId="groupName"
+                  label="Group Name"
+                  value={siteData.groupName}
+                  onChange={handleSelectionChange.bind(null, "groupName")}
+                  name="groupName"
+                  isSearch={true}
+                  objKey="group_name"
+                  url="sites/groups/"
                 />
                 <Form.Group className="mb-3 col-12" controlId="typeOfOwner">
                   <Form.Label>Type Of Owner</Form.Label>
@@ -537,15 +532,15 @@ function EditSite() {
                   objKey="username"
                   url="sites/get/support_contact/"
                 />
-                <Form.Group className="mb-3 col-12" controlId="leadSource">
+                <Form.Group className="mb-3 col-12" controlId="lead_source">
                   <Form.Label>Lead Source</Form.Label>
                   <Form.Control
                     type="text"
-                    name="leadSource"
-                    value={siteData.leadSource}
+                    name="lead_source"
+                    value={siteData.lead_source}
                     onChange={(e) =>
                       dispatchInputChange({
-                        type: "leadSource",
+                        type: "lead_source",
                         value: e.target.value,
                       })
                     }
@@ -630,22 +625,22 @@ function EditSite() {
                     }
                   />
                 </Form.Group>
-                <Form.Group className="mb-3 col-12" controlId="loaHeaderToUse">
+                <Form.Group className="mb-3 col-12" controlId="loa_header_to_use">
                   <Form.Label>LOA Header To Use</Form.Label>
                   <SelectSearch
                     options={[
-                      { name: "Site Name", value: "GAS" },
-                      { name: "Company Name", value: "ELECTRICITY" },
+                      { name: "Site Name", value: 1 },
+                      { name: "Company Name", value: 2 },
                     ]}
                     placeholder="Choose from options"
-                    value={siteData.loaHeaderToUse}
+                    value={siteData.loa_header_to_use}
                     onChange={(val) => {
                       dispatchInputChange({
-                        type: "loaHeaderToUse",
+                        type: "loa_header_to_use",
                         value: val,
                       });
                     }}
-                    name="loaHeaderToUse"
+                    name="loa_header_to_use"
                   />
                 </Form.Group>
                 <SelectionBox
@@ -763,7 +758,7 @@ function EditSite() {
                   className="mb-3 col-12"
                   controlId="isBillingSiteSame"
                 >
-                  <Form.Check 
+                  <Form.Check
                     type="switch"
                     id="custom-switch"
                     checked={siteData.isBillingSiteSame}
@@ -924,15 +919,15 @@ function EditSite() {
                     name="contactTitle"
                   />
                 </Form.Group>
-                <Form.Group className="mb-3 col-12" controlId="positon">
-                  <Form.Label>Positon</Form.Label>
+                <Form.Group className="mb-3 col-12" controlId="position">
+                  <Form.Label>Position</Form.Label>
                   <Form.Control
                     type="text"
-                    name="positon"
-                    value={siteData.positon}
+                    name="position"
+                    value={siteData.position}
                     onChange={(e) =>
                       dispatchInputChange({
-                        type: "positon",
+                        type: "position",
                         value: e.target.value,
                       })
                     }

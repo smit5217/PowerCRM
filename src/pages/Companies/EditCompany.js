@@ -15,20 +15,22 @@ const initialSiteState = {
   addressline2Company: "",
   addressline3Company: "",
   bankName: "",
-  businessType: "",
+  business_type: "",
   countryOfCompany: "",
   creditScore: "",
   estimatedTurnover: "",
   homePostCode: "",
-  isMacroBusiness: "",
+  isMacroBusiness: false,
   name: "",
+  parentCompany: "",
+  reference:"",
   numberOfEmployees: "",
   partnerDob: "",
   partnerName: "",
   postCode: "",
   registrationNo: "",
   shortCode: "",
-  sicCode: "",
+  sic_code: "",
   timeAtAddressMonths: "",
   timeAtAddressYears: "",
 };
@@ -109,7 +111,7 @@ function EditCompany() {
         accountNo: turnaryOperation(responseGetcompanyData.data.account_no),
         address: turnaryOperation(responseGetcompanyData.data.address),
         bankName: turnaryOperation(responseGetcompanyData.data.bank_name),
-        businessType: turnaryOperation(
+        business_type: turnaryOperation(
           responseGetcompanyData.data.business_type
         ),
         countryOfCompany: turnaryOperation(
@@ -126,6 +128,10 @@ function EditCompany() {
           responseGetcompanyData.data.is_macro_business
         ),
         name: turnaryOperation(responseGetcompanyData.data.name),
+        parentCompany: turnaryOperation(
+          responseGetcompanyData.data.parent_company
+        ),
+        reference: turnaryOperation(responseGetcompanyData.data.reference),
         numberOfEmployees: turnaryOperation(
           responseGetcompanyData.data.number_of_employees
         ),
@@ -136,7 +142,7 @@ function EditCompany() {
           responseGetcompanyData.data.registration_no
         ),
         shortCode: turnaryOperation(responseGetcompanyData.data.shortcode),
-        sicCode: turnaryOperation(responseGetcompanyData.data.sic_code),
+        sic_code: turnaryOperation(responseGetcompanyData.data.sic_code),
         timeAtAddressMonths: turnaryOperation(
           responseGetcompanyData.data.time_at_address_months
         ),
@@ -144,13 +150,13 @@ function EditCompany() {
           responseGetcompanyData.data.time_at_address_years
         ),
         addressline1Company: turnaryOperation(
-          responseGetcompanyData.data.billing_address?.addressline1_company
+          responseGetcompanyData.data?.addressline1_company
         ),
         addressline2Company: turnaryOperation(
-          responseGetcompanyData.data.billing_address?.addressline2_company
+          responseGetcompanyData.data?.addressline2_company
         ),
         addressline3Company: turnaryOperation(
-          responseGetcompanyData.data.billing_address?.addressline3_company
+          responseGetcompanyData.data?.addressline3_company
         ),
         isBillingSiteSame: false,
         firstName: turnaryOperation(
@@ -162,8 +168,8 @@ function EditCompany() {
         contactTitle: turnaryOperation(
           responseGetcompanyData.data.contacts?.contact_title
         ),
-        positon: turnaryOperation(
-          responseGetcompanyData.data.contacts?.positon
+        position: turnaryOperation(
+          responseGetcompanyData.data.contacts?.position
         ),
         telephoneNumber: turnaryOperation(
           responseGetcompanyData.data.contacts?.telephone_number
@@ -188,44 +194,43 @@ function EditCompany() {
       account_no: companyData.accountNo,
       address: companyData.address,
       bank_name: companyData.bankName,
-      business_type: companyData.businessType,
+      business_type: companyData.business_type,
       country_of_company: companyData.countryOfCompany,
       credit_score: companyData.creditScore,
       estimated_turnover: companyData.estimatedTurnover,
       home_post_code: companyData.homePostCode,
       is_macro_business: companyData.isMacroBusiness,
       name: companyData.name,
+      parent_company: companyData.parentCompany,
+      reference:companyData.reference,
       number_of_employees: companyData.numberOfEmployees,
       partner_dob: companyData.partnerDob,
       partner_name: companyData.partnerName,
       postcode: companyData.postCode,
       registration_no: companyData.registrationNo,
       shortcode: companyData.shortCode,
-      sic_code: companyData.sicCode,
+      sic_code: companyData.sic_code,
       time_at_address_months: companyData.timeAtAddressMonths,
       time_at_address_years: companyData.timeAtAddressYears,
-      billing_address: {
-        addressline1_company: companyData.addressline1Company,
-        addressline2_company: companyData.addressline2Company,
-        addressline3_company: companyData.addressline3Company,
-      },
+      addressline1_company: companyData.addressline1Company,
+      addressline2_company: companyData.addressline2Company,
+      addressline3_company: companyData.addressline3Company,
     };
     const contactInfo = {
       contacts: {
         first_name: companyData.firstName,
         last_name: companyData.lastName,
         contact_title: companyData.contactTitle,
-        positon: companyData.positon,
+        position: companyData.position,
         telephone_number: companyData.telephoneNumber,
         email: companyData.email,
       },
     };
-
     if (
       contactInfo.contacts.first_name ||
       contactInfo.contacts.last_name ||
       contactInfo.contacts.contact_title ||
-      contactInfo.contacts.positon ||
+      contactInfo.contacts.position ||
       contactInfo.contacts.telephone_number ||
       contactInfo.contacts.email
     ) {
@@ -305,6 +310,27 @@ function EditCompany() {
                   <Form.Control
                     type="text"
                     name="parentCompany"
+                    value={companyData.parentCompany}
+                    onChange={(e) =>
+                      dispatchInputChange({
+                        type: "parentCompany",
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3 col-12" controlId="reference">
+                  <Form.Label>Reference</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="reference"
+                    value={companyData.reference}
+                    onChange={(e) =>
+                      dispatchInputChange({
+                        type: "reference",
+                        value: e.target.value,
+                      })
+                    }
                   />
                 </Form.Group>
                 <Form.Group
@@ -340,11 +366,11 @@ function EditCompany() {
                   />
                   <SelectionBox
                     groupclassName="mb-3 col-md-6 selectbox"
-                    groupId="businessType"
+                    groupId="business_type"
                     label="Company Type"
-                    value={companyData.businessType}
-                    onChange={handleSelectionChange.bind(null, "businessType")}
-                    name="businessType"
+                    value={companyData.business_type}
+                    onChange={handleSelectionChange.bind(null, "business_type")}
+                    name="business_type"
                     isSearch={true}
                     objKey="name"
                     url="company-types/"
@@ -523,6 +549,20 @@ function EditCompany() {
                     }
                   />
                 </Form.Group>
+                <Form.Group className="mb-3 col-12" controlId="sic_code">
+                  <Form.Label>SIC Code</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="sic_code"
+                    value={companyData.sic_code}
+                    onChange={(e) =>
+                      dispatchInputChange({
+                        type: "sic_code",
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </Form.Group>
               </Tab>
               <Tab eventKey={3} title="Partner Details">
                 <Form.Group className="mb-3 col-12" controlId="partnerName">
@@ -646,7 +686,6 @@ function EditCompany() {
                     }
                   />
                 </Form.Group>
-
                 <Form.Group className="mb-3 col-12" controlId="contactTitle">
                   <Form.Label>Contact Title</Form.Label>
                   <SelectSearch
@@ -669,15 +708,15 @@ function EditCompany() {
                     name="contactTitle"
                   />
                 </Form.Group>
-                <Form.Group className="mb-3 col-12" controlId="positon">
+                <Form.Group className="mb-3 col-12" controlId="position">
                   <Form.Label>Position </Form.Label>
                   <Form.Control
                     type="text"
-                    name="positon"
-                    value={companyData.positon}
+                    name="position"
+                    value={companyData.position}
                     onChange={(e) =>
                       dispatchInputChange({
-                        type: "positon",
+                        type: "position",
                         value: e.target.value,
                       })
                     }

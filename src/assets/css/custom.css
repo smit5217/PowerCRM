@@ -813,7 +813,7 @@ p.nav-link {
 .optionListContainer,
 .optionContainer,
 .optionContainer .option {
-  z-index: 9999;
+  /* z-index: 9999; */
 }
 
 .badge a {

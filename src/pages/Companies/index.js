@@ -97,7 +97,7 @@ function Companies() {
       selector: (row) => row.business_type,
     },
     {
-      name: "Country_Of Company",
+      name: "Country Of Company",
       selector: (row) => row.country_of_company,
     },
     {
@@ -106,11 +106,11 @@ function Companies() {
     },
 
     {
-      name: "Is MAcro Business",
+      name: "Macro Business",
       selector: (row) => (row.is_macro_business ? "YES" : "NO"),
     },
     {
-      name: "Partner Date of birth",
+      name: "Partner DOB",
       selector: (row) => row.partner_dob,
     },
     {
