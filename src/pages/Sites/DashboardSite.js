@@ -120,7 +120,7 @@ function DashboardSite() {
                 <p>First Name : {companyData?.contacts?.first_name}</p>
                 <p>Last Name : {companyData?.contacts?.last_name}</p>
                 <p>Contact Title : {companyData?.contacts?.contact_title}</p>
-                <p>Positon : {companyData?.contacts?.position}</p>
+                <p>Position : {companyData?.contacts?.position}</p>
                 <p>
                   Telephone Number : {companyData?.contacts?.telephone_number}
                 </p>

@@ -56,6 +56,7 @@ function DashboardCompany() {
               <div className="neumorphism-box">
                 <h5>Company Info</h5>
                 <p>Parent Company : {companyData?.parent_company}</p>
+                <p>Reference : {companyData?.reference}</p>
                 <p>Number Of Employees : {companyData?.number_of_employees}</p>
                 <p>Registration Number : {companyData?.registration_no}</p>
                 <p>Company Type : {companyData?.name}</p>
@@ -80,6 +81,7 @@ function DashboardCompany() {
                 <p>Bank Name : {companyData?.bank_name}</p>
                 <p>Account No : {companyData?.account_no}</p>
                 <p>Shortcode : {companyData?.shortcode}</p>
+                <p>SIC Code : {companyData?.sic_code}</p>
               </div>
             </div>
             <div className="col-md-6">

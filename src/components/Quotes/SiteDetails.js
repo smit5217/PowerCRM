@@ -52,7 +52,7 @@ function SiteDetails(props) {
           Current Gas & Electricity Supplier Details :{" "}
           {siteData?.current_gas_and_electricity_supplier_details}
         </p>
-        <p>Customer Consent : {siteData?.customer_consent}</p>
+        <p>Customer Consent : {siteData?.customer_consent ? "Yes" : "No"}</p>
         <p>Lead Source : {siteData?.lead_source}</p>
         <p>Lead Type : {siteData?.lead_type}</p>
         <p>LOA Header To Use : {siteData?.loa_header_to_use}</p>

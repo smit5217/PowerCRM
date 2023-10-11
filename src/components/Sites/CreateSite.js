@@ -13,7 +13,6 @@ const reducerSite = (state, action) => {
 
 function CreateSite(props) {
   const initialSiteDetails = {
-    parentCompany: "",
     siteName: "",
     companyName: "",
     reference: "",
