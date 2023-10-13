@@ -123,8 +123,6 @@ function EditSite() {
         expectStatusCode: [200, 201],
       });
     }
-    console.log("----responseGetSiteData---->", responseGetSiteData);
-    console.log("---siteData-->", siteData);
     if (responseGetSiteData) {
       const responseData = {
         groupName: turnaryOperation(responseGetSiteData.data.group_name),

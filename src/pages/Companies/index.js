@@ -75,7 +75,6 @@ function Companies() {
       name: "Address",
       selector: (row) => row.address,
     },
-
     {
       name: "Address line1",
       selector: (row) => row.addressline1_company,
@@ -104,7 +103,6 @@ function Companies() {
       name: "Home Postcode",
       selector: (row) => row.home_post_code,
     },
-
     {
       name: "Macro Business",
       selector: (row) => (row.is_macro_business ? "YES" : "NO"),
@@ -141,7 +139,7 @@ function Companies() {
     <>
       <CreateCompany setRefreshTable={setRefreshTable} />
       <NeumorphismWrapper>
-        <div className="col-lg-12 flex-col-btns"> {renderColBtns()}</div>
+        {renderColBtns()}
         <DTable
           url="company/?ordering=-date_created"
           transformFunction={DTableFunction}

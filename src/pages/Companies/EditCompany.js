@@ -23,7 +23,7 @@ const initialSiteState = {
   isMacroBusiness: false,
   name: "",
   parentCompany: "",
-  reference:"",
+  reference: "",
   numberOfEmployees: "",
   partnerDob: "",
   partnerName: "",
@@ -69,6 +69,7 @@ function EditCompany() {
   );
   const navigate = useNavigate();
   const [key, setKey] = useState(0);
+  const [err, setErr] = useState("");
 
   const paramsId = useParams().editId;
 
@@ -189,6 +190,27 @@ function EditCompany() {
 
   const editCompany = function (e) {
     e.preventDefault();
+    if (!companyData.estimatedTurnover) {
+      setErr("Estimated Turnover is Required");
+      return;
+    } else if (!companyData.numberOfEmployees) {
+      setErr("Number Of Employees is Required");
+      return;
+    } else if (!companyData.partnerDob) {
+      setErr("Partner DOB is Required");
+      return;
+    } else if (!companyData.postCode) {
+      setErr("Postcode is Required");
+      return;
+    } else if (!companyData.timeAtAddressMonths) {
+      setErr("Time At Address (Months) is Required");
+      return;
+    } else if (!companyData.timeAtAddressYears) {
+      setErr("Time At Address (Years) is Required");
+      return;
+    } else if (err?.length) {
+      setErr("");
+    }
     let sendData = {
       account_name: companyData.accountName,
       account_no: companyData.accountNo,
@@ -202,7 +224,7 @@ function EditCompany() {
       is_macro_business: companyData.isMacroBusiness,
       name: companyData.name,
       parent_company: companyData.parentCompany,
-      reference:companyData.reference,
+      reference: companyData.reference,
       number_of_employees: companyData.numberOfEmployees,
       partner_dob: companyData.partnerDob,
       partner_name: companyData.partnerName,
@@ -282,7 +304,6 @@ function EditCompany() {
           <h4>Company Details</h4>
         </div>
         <div id="tabsSimple" className=" layout-spacing"></div>
-        <div className="">
           <Form onSubmit={editCompany}>
             <Tabs
               activeKey={key}
@@ -753,6 +774,7 @@ function EditCompany() {
               </Tab>
             </Tabs>
             <div className="col-md-12 centerBtn">
+              {err?.length ? <p className="dengor">{err}</p> : ""}
               {key === 0 ? (
                 ""
               ) : (
@@ -764,11 +786,9 @@ function EditCompany() {
                   Prev
                 </Button>
               )}
-
               <Button type="submit">
                 {reqCompanyStatus.isLoading ? "Submitting" : "Submit"}
               </Button>
-
               {key === 4 ? (
                 " "
               ) : (
@@ -778,7 +798,6 @@ function EditCompany() {
               )}
             </div>
           </Form>
-        </div>
       </NeumorphismWrapper>
     </>
   );
