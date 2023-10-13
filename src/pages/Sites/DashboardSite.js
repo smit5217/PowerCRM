@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
+import NeumorphismWrapper from "../../components/UI/Layouts/NeumorphismWrapper";
+import { Tab, Table, Tabs } from "react-bootstrap";
+import { quoteColumns } from "../Quotes";
+import useDTColumns from "../../hooks/useDTColumns";
+import DTable from "../../components/DTable"; 
+import { DTableFunction } from ".";
 
-function DashboardSite() {
-  const [companyData, setCompanyData] = useState();
+const DashboardSite = () => {
+  const [key, setKey] = useState(0);
+  const [siteData, setSiteData] = useState();
+  const [refreshTable, setRefreshTable] = useState(true);
+  const [cols, setCols, changeCols, renderColBtns] = useDTColumns(quoteColumns);
+
 
   const [
     companyGETData,
@@ -32,105 +42,126 @@ function DashboardSite() {
       });
     }
     if (responseGetcompanyData) {
-      setCompanyData(responseGetcompanyData.data);
+      setSiteData(responseGetcompanyData.data);
     }
   }, [paramsId, responseGetcompanyData]);
 
   return (
-    <div className="col-xl-12 col-12 layout-spacing">
-      <div className="statbox box box-shadow ">
-        <div className="widget-content widget-content-area">
-          <div className="text-center">
-            <h4>{companyData?.site_name}</h4>
-            <hr />
-          </div>
-          <div className="row">
-            <div className="col-md-6">
-              <div className="neumorphism-box">
-                <h5>Site Info</h5>
-                <p>Group Name : {companyData?.group_name}</p>
-                <p>Company Name : {companyData?.contacts?.company}</p>
-                <p>Type Of Owner : {companyData?.type_of_owner}</p>
-                <p>Owner Name : {companyData?.owner_name}</p>
-                <p>
-                  Current Gas And Electricity Supplier Details :
-                  {companyData?.current_gas_and_electricity_supplier_details}
-                </p>
-                <p>Tenant : {companyData?.tenant ? "Yes" : "No"} </p>
-                <p>Vacant : {companyData?.vacant ? "Yes" : "No"} </p>
-                <p>Change Of Tenancy : {companyData?.change_of_tenancy ? "Yes" : "No"} </p>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="neumorphism-box">
-                <h5>Our Details</h5>
-                <p>Site Reference : {companyData?.site_reference}</p>
-                <p>Support Contact : {companyData?.support_contact}</p>
-                <p>Lead Source : {companyData?.lead_source}</p>
-                <p>Notes : {companyData?.notes}</p>
-                <p>Lead Type : {companyData?.lead_type}</p>
-                <p>Bill To Sent : {companyData?.bill_to_sent ? "Yes" : "No"} </p>
-                <p>
-                  Welcome Letter Sent :{' '}
-                  {companyData?.welcome_letter_send ? "Yes" : "No"}{" "}
-                </p>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="neumorphism-box">
-                <h5>Letter Of Authority</h5>
-                <p>Agent Email : {companyData?.agent_email}</p>
-                <p>LOA Header To Use : {companyData?.loa_header_to_use}</p>
-                <p>LOA Template : {companyData?.loa_template}</p>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="neumorphism-box">
-                <h5>Site Address</h5>
-                <p>Postcode : {companyData?.site_address?.postcode}</p>
-                <p>Address Line 1 : {companyData?.site_address?.addressline1}</p>
-                <p>Address Line 2 : {companyData?.site_address?.addressline2}</p>
-                <p>Address Line 3 : {companyData?.site_address?.addressline3}</p>
-                <p>Address Line 4 : {companyData?.site_address?.addressline4}</p>
-                <p>Country : {companyData?.site_address?.country}</p>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="neumorphism-box">
-                <h5>Billing Address</h5>
-                <p>Postcode : {companyData?.billing_address?.postcode}</p>
-                <p>
-                  Address Line 1 : {companyData?.billing_address?.addressline1}
-                </p>
-                <p>
-                  Address Line 2 : {companyData?.billing_address?.addressline2}
-                </p>
-                <p>
-                  Address Line 3 : {companyData?.billing_address?.addressline3}
-                </p>
-                <p>
-                  Address Line 4 : {companyData?.billing_address?.addressline4}
-                </p>
-                <p>Country : {companyData?.billing_address?.country}</p>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="neumorphism-box">
-                <h5>Contact</h5>
-                <p>First Name : {companyData?.contacts?.first_name}</p>
-                <p>Last Name : {companyData?.contacts?.last_name}</p>
-                <p>Contact Title : {companyData?.contacts?.contact_title}</p>
-                <p>Position : {companyData?.contacts?.position}</p>
-                <p>
-                  Telephone Number : {companyData?.contacts?.telephone_number}
-                </p>
-                <p>Email : {companyData?.contacts?.email}</p>
-              </div>
-            </div>
-          </div>
+    <>
+      <NeumorphismWrapper>
+        <div className="text-center">
+          <h4>{siteData?.site_name}</h4>
         </div>
-      </div>
-    </div>
+        <div>
+          <Tabs
+            activeKey={key}
+            onSelect={(k) => setKey(+k)}
+            id="controlled-tab-example"
+            className="mb-3"
+          >
+            <Tab eventKey={0} title="Site">
+              <Table>
+                <tr>
+                  <th>Site Information</th>
+                  <td>Group Name : {siteData?.group_name}</td>
+                  <td>Company Name : {siteData?.contacts?.company}</td>
+                  <td>Type Of Owner : {siteData?.type_of_owner}</td>
+                  <td>Owner Name : {siteData?.owner_name}</td>
+                  <td>
+                    Current Gas And Electricity Supplier Details :{' '}
+                    {siteData?.current_gas_and_electricity_supplier_details}
+                  </td>
+                  <td>Tenant : {siteData?.tenant ? "Yes" : "No"}</td>
+                  <td>Vacant : {siteData?.vacant ? "Yes" : "No"}</td>
+                  <td>
+                    Change Of Tenancy :{" "}
+                    {siteData?.change_of_tenancy ? "Yes" : "No"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Our Details</th>
+                  <td>Site Reference : {siteData?.site_reference}</td>
+                  <td>Support Contact : {siteData?.support_contact}</td>
+                  <td>Lead Source : {siteData?.lead_source}</td>
+                  <td>Notes : {siteData?.notes}</td>
+                  <td>Lead Type : {siteData?.lead_type}</td>
+                  <td>
+                    Bill To Sent : {siteData?.bill_to_sent ? "Yes" : "No"}
+                  </td>
+                  <td>
+                    Welcome Letter Sent :{" "}
+                    {siteData?.welcome_letter_send ? "Yes" : "No"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Letter Of Authority</th>
+                  <td>Agent Email : {siteData?.agent_email}</td>
+                  <td>LOA Header To Use : {siteData?.loa_header_to_use}</td>
+                  <td>LOA Template : {siteData?.loa_template}</td>
+                </tr>
+                <tr>
+                  <th>Site Address</th>
+                  <td>
+                    Address Line 1 : {siteData?.site_address?.addressline1}
+                  </td>
+                  <td>
+                    Address Line 2 : {siteData?.site_address?.addressline2}
+                  </td>
+                  <td>
+                    Address Line 3 : {siteData?.site_address?.addressline3}
+                  </td>
+                  <td>
+                    Address Line 4 : {siteData?.site_address?.addressline4}
+                  </td>
+                  <td>Postcode : {siteData?.site_address?.postcode}</td>
+                  <td>Country : {siteData?.site_address?.country}</td>
+                </tr>
+                <tr>  
+                  <th>Billing Address</th>
+                  <td>
+                    Address Line 1 : {siteData?.billing_address?.addressline1}
+                  </td>
+                  <td>
+                    Address Line 2 : {siteData?.billing_address?.addressline2}
+                  </td>
+                  <td>
+                    Address Line 3 : {siteData?.billing_address?.addressline3}
+                  </td>
+                  <td>
+                    Address Line 4 : {siteData?.billing_address?.addressline4}
+                  </td>
+                  <td>Postcode : {siteData?.billing_address?.postcode}</td> 
+                  <td>Country : {siteData?.billing_address?.country}</td>
+                </tr>
+                <tr>  
+                  <th>Contact</th>
+                  <td>First Name : {siteData?.contacts?.first_name}</td>
+                  <td>Last Name : {siteData?.contacts?.last_name}</td>
+                  <td>Contact Title : {siteData?.contacts?.contact_title}</td>
+                  <td>Position : {siteData?.contacts?.position}</td>
+                  <td>
+                    Telephone Number : {siteData?.contacts?.telephone_number}
+                  </td>
+                  <td>Email : {siteData?.contacts?.email}</td>
+                </tr>
+              </Table>
+            </Tab>
+            <Tab eventKey={1} title="Quotes">
+              <div>
+                {renderColBtns()}
+                <DTable
+                  url={`quote/generate-quote/?site=${paramsId}`} 
+                  transformFunction={DTableFunction}
+                  columns={cols}
+                  refreshTable={refreshTable}
+                  setRefreshTable={setRefreshTable}
+                />
+              </div>
+            </Tab>  
+          </Tabs>
+        </div>
+      </NeumorphismWrapper>
+    </>
   );
 }
 

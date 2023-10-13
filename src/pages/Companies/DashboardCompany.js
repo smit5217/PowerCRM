@@ -2,9 +2,19 @@ import React, { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import { useParams } from "react-router-dom";
 import LoadingData from "../../components/UI/LoadingData";
+import NeumorphismWrapper from "../../components/UI/Layouts/NeumorphismWrapper";
+import { Tab, Tabs } from "react-bootstrap";
+import Table from "react-bootstrap/Table";
+import useDTColumns from "../../hooks/useDTColumns";
+import DTable from "../../components/DTable";
+import { DTableFunction, siteColumns } from "../Sites";
 
-function DashboardCompany() {
+const DashboardCompany = () => {
+  const [key, setKey] = useState(0);
   const [companyData, setCompanyData] = useState();
+  const [refreshTable, setRefreshTable] = useState(true);
+  const [cols, setCols, changeCols, renderColBtns] = useDTColumns(siteColumns);
+
   const [
     companyGETData,
     setCompanyGETData,
@@ -43,73 +53,99 @@ function DashboardCompany() {
       </div>
     );
   }
+
   return (
-    <div className="col-xl-12 col-12 layout-spacing">
-      <div className="statbox box box-shadow ">
-        <div className="widget-content widget-content-area">
-          <div className="text-center">
-            <h4>{companyData?.name}</h4>
-            <hr />
-          </div>
-          <div className="row">
-            <div className="col-md-6">
-              <div className="neumorphism-box">
-                <h5>Company Info</h5>
-                <p>Parent Company : {companyData?.parent_company}</p>
-                <p>Reference : {companyData?.reference}</p>
-                <p>Number Of Employees : {companyData?.number_of_employees}</p>
-                <p>Registration Number : {companyData?.registration_no}</p>
-                <p>Company Type : {companyData?.name}</p>
-                <p>Estimated Turnover : {companyData?.estimated_turnover}</p>
-                <p>Micro Business : {companyData?.is_macro_business ? "Yes" : "No"}</p>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="neumorphism-box">
-                <h5>Company Address</h5>
-                <p>Address Line 1 : {companyData?.addressline1_company}</p>
-                <p>Address Line 2 : {companyData?.addressline2_company}</p>
-                <p>Address Line 3 : {companyData?.addressline3_company}</p>
-                <p>Postcode : {companyData?.postcode}</p>
-                <p>Country : {companyData?.country_of_company}</p>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="neumorphism-box">
-                <h5>Bank Details</h5>
-                <p>Account Name : {companyData?.account_name}</p>
-                <p>Bank Name : {companyData?.bank_name}</p>
-                <p>Account No : {companyData?.account_no}</p>
-                <p>Shortcode : {companyData?.shortcode}</p>
-                <p>SIC Code : {companyData?.sic_code}</p>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="neumorphism-box">
-                <h5>Partner Details</h5>
-                <p>Partner Name : {companyData?.partner_name}</p>
-                <p>Partner DOB : {companyData?.partner_dob}</p>
-                <p>Address : {companyData?.address}</p>
-                <p>Home Postcode : {companyData?.home_post_code}</p>
-                <p>Time At Address (Years) : {companyData?.time_at_address_years}</p>
-                <p>Time At Address (Months) : {companyData?.time_at_address_months}</p>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="neumorphism-box">
-                <h5>Contact</h5>
-                <p>First Name : {companyData?.contacts?.first_name}</p>
-                <p>Last Name : {companyData?.contacts?.last_name} </p>
-                <p>Contact Title : {companyData?.contacts?.contact_title}</p>
-                <p>Position : {companyData?.contacts?.position}</p>
-                <p>Telephone Number : {companyData?.contacts?.telephone_number}</p>
-                <p>Email : {companyData?.contacts?.email}</p>
-              </div>
-            </div>
-          </div>
+    <>
+      <NeumorphismWrapper>
+        <div className="text-center">
+          <h4>{companyData?.name}</h4>
         </div>
-      </div>
-    </div>
+        <div>
+          <Tabs
+            activeKey={key}
+            onSelect={(k) => setKey(+k)}
+            id="controlled-tab-example"
+            className="mb-3"
+          >
+            <Tab eventKey={0} title="Company">
+              <Table>
+                <tr>
+                  <th>Company Information</th>
+                  <td>Parent Company : {companyData?.parent_company}</td>
+                  <td>Reference : {companyData?.reference}</td>
+                  <td>No Of Employees : {companyData?.number_of_employees}</td>
+                  <td>Registration No : {companyData?.registration_no}</td>
+                  <td>Company Type : {companyData?.business_type}</td>
+                  <td>
+                    Estimated Turnover : {companyData?.estimated_turnover}
+                  </td>
+                  <td>
+                    Micro Business :{" "}
+                    {companyData?.is_macro_business ? "Yes" : "No"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Company Address</th>
+                  <td>Address Line 1 : {companyData?.addressline1_company}</td>
+                  <td>Address Line 2 : {companyData?.addressline2_company}</td>
+                  <td>Address Line 3 : {companyData?.addressline3_company}</td>
+                  <td>Postcode : {companyData?.postcode}</td>
+                  <td>Country : {companyData?.country_of_company}</td>
+                </tr>
+                <tr>
+                  <th>Bank Details</th>
+                  <td>Account Name : {companyData?.account_name}</td>
+                  <td>Bank Name : {companyData?.bank_name}</td>
+                  <td>Account No : {companyData?.account_no}</td>
+                  <td>Shortcode : {companyData?.shortcode}</td>
+                  <td>SIC Code : {companyData?.sic_code}</td>
+                </tr>
+                <tr>
+                  <th>Partner Details</th>
+                  <td>Partner Name : {companyData?.partner_name}</td>
+                  <td>Partner DOB : {companyData?.partner_dob}</td>
+                  <td>Address : {companyData?.address}</td>
+                  <td>Home Postcode : {companyData?.home_post_code}</td>
+                  <td>
+                    Time At Address (Years) :{" "}
+                    {companyData?.time_at_address_years}
+                  </td>
+                  <td>
+                    Time At Address (Months) :{" "}
+                    {companyData?.time_at_address_months}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Contact</th>
+                  <td>First Name : {companyData?.contacts?.first_name}</td>
+                  <td>Last Name : {companyData?.contacts?.last_name}</td>
+                  <td>
+                    Contact Title : {companyData?.contacts?.contact_title}
+                  </td>
+                  <td>Position : {companyData?.contacts?.position}</td>
+                  <td>
+                    Telephone Number : {companyData?.contacts?.telephone_number}
+                  </td>
+                  <td>Email : {companyData?.contacts?.email}</td>
+                </tr>
+              </Table>
+            </Tab>
+            <Tab eventKey={1} title="Sites">
+              <div>
+                {renderColBtns()}
+                <DTable
+                  url={`sites/get/site/?company=${paramsId}`} 
+                  transformFunction={DTableFunction}
+                  columns={cols}
+                  refreshTable={refreshTable}
+                  setRefreshTable={setRefreshTable}
+                />
+              </div>
+            </Tab>
+          </Tabs>
+        </div>
+      </NeumorphismWrapper>
+    </>
   );
 }
 
