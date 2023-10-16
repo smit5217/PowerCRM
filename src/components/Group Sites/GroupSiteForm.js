@@ -6,13 +6,16 @@ import useFetch from "../../hooks/useFetch";
 import LoadingData from "../UI/LoadingData";
 import NeumorphismWrapper from "../UI/Layouts/NeumorphismWrapper";
 import MultiSelectBox from "../UI/Form/MultiSelectBox";
+import SelectionBox from "../Form/SelectionBox";
 
 function GroupSiteForm(props) {
   const [formData, setFormData] = useState({
     gName: "",
     sites: "",
     gType: "",
+    gCompany: "",
   });
+
   const groupSiteId = useParams().groupSiteId;
   const navigate = useNavigate();
   const [err, setErr] = useState("");
@@ -45,6 +48,7 @@ function GroupSiteForm(props) {
             })
           : [],
         gType: responseGetcompanyData?.data?.group_type,
+        gCompany: responseGetcompanyData?.data?.group_company,
       });
     }
   }, [responseGetcompanyData]);
@@ -70,7 +74,7 @@ function GroupSiteForm(props) {
         expectStatusCode: [200, 201],
       });
     } else {
-      setFormData({ gName: "", sites: "", gType: "" });
+      setFormData({ gName: "", sites: "", gType: "", gCompany: "" });
     }
   }, [groupSiteId]);
 
@@ -89,6 +93,7 @@ function GroupSiteForm(props) {
       group_name: formData.gName,
       group_type: formData.gType,
       sites: formData?.sites?.map((site) => site.id),
+      group_company: formData.gCompany,
     };
     setResponseData(null);
     let method = "POST",
@@ -122,7 +127,7 @@ function GroupSiteForm(props) {
             : "Group sites Edited Succesfully"
         );
         props.refreshTableEditMode();
-        setFormData({ gName: "", sites: "", gType: "" });
+        setFormData({ gName: "", sites: "", gType: "", gCompany: "" });
 
         if (groupSiteId) {
           navigate("/group-sites/");
@@ -147,7 +152,7 @@ function GroupSiteForm(props) {
       <NeumorphismWrapper>
         <Form onSubmit={createGroupSite}>
           <div className="row">
-            <Form.Group className="mb-3 col-md-4" controlId="stuName">
+            <Form.Group className="mb-3 col-md-3" controlId="stuName">
               <Form.Label>Group Name</Form.Label>
               <Form.Control
                 type="text"
@@ -160,8 +165,23 @@ function GroupSiteForm(props) {
                 }
               />
             </Form.Group>
+            <SelectionBox
+              groupClass="mb-3 col-md-3 selectbox"
+              groupId="companyName"
+              label="Company Name"
+              value={formData.gCompany}
+              onChange={(val) => {
+                setFormData((prev) => {
+                  return { ...prev, gCompany: val };
+                });
+              }}
+              name="companyName"
+              isSearch={true}
+              objKey="name"
+              url="sites/get/company_name/"
+            />
             <MultiSelectBox
-              groupClass="mb-3 col-md-4 selectbox"
+              groupClass="mb-3 col-md-3 selectbox"
               groupId="parentCompany"
               label="Sites"
               multiple={true}
@@ -179,10 +199,14 @@ function GroupSiteForm(props) {
               name="parentCompany"
               isSearch={true}
               objKey={["site_name"]}
-              url="sites/get/site/?brief=True"
+              url={
+                formData.gCompany
+                  ? `sites/get/site/?company=${formData.gCompany}&brief=True`
+                  : ""
+              }
             />
             <Form.Group
-              className={"mb-3 col-md-4 selectbox"}
+              className={"mb-3 col-md-3 selectbox"}
               controlId={"companyName"}
             >
               <Form.Label className="text-center itsBlock">

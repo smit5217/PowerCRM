@@ -28,7 +28,7 @@ function Shortcuts() {
             <p>Alt + c : All Company</p>
           </div>
           <div className="col-md-4">
-            <p>Alt + s : All Site</p>
+            <p>Alt + s : All Sites</p>
           </div>
           <div className="col-md-4">
             <p>Alt + q : All Qutoes</p>

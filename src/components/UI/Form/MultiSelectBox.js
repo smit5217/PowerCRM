@@ -1,14 +1,14 @@
 import Multiselect from "multiselect-react-dropdown";
 import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
-import { ajaxCall, ajaxCallWithHeaderOnly } from "../../../helpers/ajaxCall";
 import { useSelector } from "react-redux";
 import useFetch from "../../../hooks/useFetch";
 
 function MultiSelectBox(props) {
-  const [options, setOptions] = useState([]);
   const authData = useSelector((state) => state.authStore);
+  const [options, setOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
   const [
     sendReqData,
     setSendReqData,
@@ -22,6 +22,7 @@ function MultiSelectBox(props) {
     if (props?.isNeed) {
       url = props.url + `${props.separator}${props.paramName}=${props.paramId}`;
     }
+    setResponseData(null)
     setSendReqData({
       ...sendReqData,
       url,
@@ -32,20 +33,7 @@ function MultiSelectBox(props) {
       expectStatusCode: [200],
     });
   };
-  useEffect(() => {
-    if (props?.isStatic) {
-      setOptions(props?.cols);
-      setIsLoading(false);
-      return;
-    }
-    if (props.url?.length) {
-      props.isEdit
-        ? props.isEditLoading
-          ? data()
-          : console.log("no need")
-        : data();
-    }
-  }, [props.url, props.isEditLoading, props.isEdit]);
+
 
   useEffect(() => {
     if (responseData) {
@@ -75,6 +63,21 @@ function MultiSelectBox(props) {
       setIsLoading(false);
     }
   }, [responseData]);
+
+  useEffect(() => {
+    if (props?.isStatic) {
+      setOptions(props?.cols);
+      setIsLoading(false);
+      return;
+    }
+    if (props.url?.length) {
+      props.isEdit
+        ? props.isEditLoading
+          ? data()
+          : console.log("no need")
+        : data();
+    }
+  }, [props.url, props.isEditLoading, props.isEdit]);
   
   return (
     <Form.Group className={props.groupClass} controlId={props.groupId}>
