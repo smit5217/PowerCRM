@@ -38,16 +38,6 @@ function Header(props) {
           ) : (
             ""
           )}
-
-          {location === "/group-quotes" ? (
-            <div className="text-right mb-3">
-              <Link to="/group-quotes/add" className="btn btn-primary">
-                Add Group Quotes
-              </Link>
-            </div>
-          ) : (
-            ""
-          )}
         </header>
       </div>
     </>
