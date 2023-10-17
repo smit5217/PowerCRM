@@ -21,7 +21,7 @@ import DashboardSite from "./pages/Sites/DashboardSite";
 import AddQuote from "./pages/Quotes/AddQuote";
 import Quote from "./pages/Quotes";
 import EditQuote from "./pages/Quotes/EditQuote";
-import GroupQuote from "./pages/QuoteGroup";
+import GroupQuotes from "./pages/QuoteGroup/GroupQuotes";
 import AddGroupQuote from "./pages/QuoteGroup/AddGroupQuote";
 import EditGroupQuote from "./pages/QuoteGroup/EditGroupQuote";
 
@@ -89,7 +89,7 @@ const router = createBrowserRouter(
         },
         {
           path: "group-quotes",
-          element: <GroupQuote />,
+          element: <GroupQuotes />,
         },
         {
           path: "group-quotes/add",

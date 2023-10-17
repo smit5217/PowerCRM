@@ -13,7 +13,7 @@ function GroupSiteForm(props) {
     gName: "",
     sites: "",
     gType: "",
-    gCompany: "",
+    company: "",
   });
 
   const groupSiteId = useParams().groupSiteId;
@@ -48,7 +48,7 @@ function GroupSiteForm(props) {
             })
           : [],
         gType: responseGetcompanyData?.data?.group_type,
-        gCompany: responseGetcompanyData?.data?.group_company,
+        company: responseGetcompanyData?.data?.company,
       });
     }
   }, [responseGetcompanyData]);
@@ -74,7 +74,7 @@ function GroupSiteForm(props) {
         expectStatusCode: [200, 201],
       });
     } else {
-      setFormData({ gName: "", sites: "", gType: "", gCompany: "" });
+      setFormData({ gName: "", sites: "", gType: "", company: "" });
     }
   }, [groupSiteId]);
 
@@ -93,7 +93,7 @@ function GroupSiteForm(props) {
       group_name: formData.gName,
       group_type: formData.gType,
       sites: formData?.sites?.map((site) => site.id),
-      group_company: formData.gCompany,
+      company: formData.company,
     };
     setResponseData(null);
     let method = "POST",
@@ -127,7 +127,7 @@ function GroupSiteForm(props) {
             : "Group sites Edited Succesfully"
         );
         props.refreshTableEditMode();
-        setFormData({ gName: "", sites: "", gType: "", gCompany: "" });
+        setFormData({ gName: "", sites: "", gType: "", company: "" });
 
         if (groupSiteId) {
           navigate("/group-sites/");
@@ -169,10 +169,10 @@ function GroupSiteForm(props) {
               groupClass="mb-3 col-md-3 selectbox"
               groupId="companyName"
               label="Company Name"
-              value={formData.gCompany}
+              value={formData.company}
               onChange={(val) => {
                 setFormData((prev) => {
-                  return { ...prev, gCompany: val };
+                  return { ...prev, company: val };
                 });
               }}
               name="companyName"
@@ -200,8 +200,8 @@ function GroupSiteForm(props) {
               isSearch={true}
               objKey={["site_name"]}
               url={
-                formData.gCompany
-                  ? `sites/get/site/?company=${formData.gCompany}&brief=True`
+                formData.company
+                  ? `sites/get/site/?company=${formData.company}&brief=True`
                   : ""
               }
             />
