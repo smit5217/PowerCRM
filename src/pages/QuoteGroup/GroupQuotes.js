@@ -6,7 +6,7 @@ import NeumorphismWrapper from "../../components/UI/Layouts/NeumorphismWrapper";
 import UiModal from "../../components/UI/UiModal";
 import SitesDT from "../../components/Group Sites/SitesDT";
 
-function GroupQuote() {
+const GroupQuotes = () => {
   const [refreshTable, setRefreshTable] = useState(true);
 
   const [showSites, SetShowSites] = useState({
@@ -74,19 +74,13 @@ function GroupQuote() {
     SetShowSites({ total: null, show: false, sites: [], groupId: "" });
 
   const [cols, setCols, changeCols, renderColBtns] = useDTColumns(columns);
-  
+
+  const refreshTableEditMode = function () {
+    setRefreshTable(true);
+  };
+
   return (
     <>
-      <NeumorphismWrapper>
-        {renderColBtns()}
-        <DTable
-          url="quote/group-quote/?ordering=-date_created"
-          transformFunction={DTableFunction}
-          columns={cols}
-          refreshTable={refreshTable}
-          setRefreshTable={setRefreshTable}
-        />
-      </NeumorphismWrapper>
       {showSites.show ? (
         <UiModal
           showStatus={showSites.show}
@@ -98,8 +92,18 @@ function GroupQuote() {
       ) : (
         ""
       )}
+      <NeumorphismWrapper>
+        {renderColBtns()}
+        <DTable
+          url="quote/group-quote/?ordering=-date_created"
+          transformFunction={DTableFunction}
+          columns={cols}
+          refreshTable={refreshTable}
+          setRefreshTable={setRefreshTable}
+        />
+      </NeumorphismWrapper>
     </>
   );
 }
 
-export default GroupQuote;
+export default GroupQuotes;

@@ -196,7 +196,7 @@ function GroupQuoteForm(props) {
           objKey={["supplier"]}
           url="quote/recent-quotes/"
         />
-        <div className="col-md-12">
+        <div className="col-md-12 text-center">
           {err ? <p className="text-center red">{err}</p> : ""}
           <Button type="submit">
             {reqCompanyStatus.isLoading ? "Submitting" : "Submit"}
