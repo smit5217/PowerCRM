@@ -92,12 +92,8 @@ const router = createBrowserRouter(
           element: <GroupQuotes />,
         },
         {
-          path: "group-quotes/add",
-          element: <AddGroupQuote />,
-        },
-        {
-          path: "group-quotes/edit/:quoteId",
-          element: <EditGroupQuote />,
+          path: "group-quotes/edit/:groupQuoteId",
+          element: <GroupQuotes />,
         },
       ],
     },
