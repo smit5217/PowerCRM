@@ -15,7 +15,6 @@ function GroupSites() {
     groupId: "",
   });
 
-  // to refresh table
   const [refreshTable, setRefreshTable] = useState(true);
   const hideModal = () =>
     SetShowSites({ total: null, show: false, sites: [], groupId: "" });
@@ -82,14 +81,17 @@ function GroupSites() {
   ];
 
   const [cols, setCols, changeCols, renderColBtns] = useDTColumns(columns);
+
   const DTableFunction = function (data) {
     return data;
   };
+
   const refreshTableEditMode = function () {
-    // setEditMode(null);
     setRefreshTable(true);
   };
+
   const openPopup = function () {};
+
   return (
     <>
       <GroupSiteForm

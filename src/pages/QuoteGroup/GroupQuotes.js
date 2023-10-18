@@ -70,14 +70,11 @@ const GroupQuotes = () => {
       selector: (row) => row.group_name,
     },
   ];
+
   const hideModal = () =>
     SetShowSites({ total: null, show: false, sites: [], groupId: "" });
 
   const [cols, setCols, changeCols, renderColBtns] = useDTColumns(columns);
-
-  const refreshTableEditMode = function () {
-    setRefreshTable(true);
-  };
 
   return (
     <>
@@ -94,6 +91,11 @@ const GroupQuotes = () => {
       )}
       <NeumorphismWrapper>
         {renderColBtns()}
+        <div className="text-right mb-3">
+          <Link to="/group-quotes/add" className="btn btn-primary">
+            Add Group Quotes
+          </Link>
+        </div>
         <DTable
           url="quote/group-quote/?ordering=-date_created"
           transformFunction={DTableFunction}
@@ -104,6 +106,6 @@ const GroupQuotes = () => {
       </NeumorphismWrapper>
     </>
   );
-}
+};
 
 export default GroupQuotes;

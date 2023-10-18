@@ -6,24 +6,34 @@ import { uiAction } from "../../store/uiStore";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import { useDispatch } from "react-redux";
-import MultiSelectBox from "../UI/Form/MultiSelectBox";
+import SelectionBox from "../Form/SelectionBox";
 
-const initialSiteState = {
-  groupName: "",
-  groupSelect: [],
+const initialGroupQuotesState = {
+  site: "",
+  supplier: "",
+  product: "",
+  term: "",
+  dayRate: "",
+  nightRate: "",
+  standingCharge: "",
+  kvaCharge: "",
+  additionalCharge: "",
+  extraInfo: "",
+  upLift: "",
+  rateIncludedInUplift: false,
 };
 
-const QuoteReducer = (state, action) => {
+const GroupQuotesReducer = (state, action) => {
   if (action?.all) {
     return action.data;
   }
   return { ...state, [action.type]: action.value };
 };
 
-function GroupQuoteForm(props) {
-  const [quoteForm, dispatchInputChange] = useReducer(
-    QuoteReducer,
-    initialSiteState
+const GroupQuoteForm = (props) => {
+  const [groupQuotesForm, dispatchInputChange] = useReducer(
+    GroupQuotesReducer,
+    initialGroupQuotesState
   );
 
   const [err, setErr] = useState("");
@@ -48,27 +58,56 @@ function GroupQuoteForm(props) {
 
   const navigate = useNavigate();
 
-  const handleSelectionChange = function (value) {
-    dispatchInputChange({ type: "groupSelect", value });
+  const handleSelectionChange = function (type,value) {
+    dispatchInputChange({ type, value });
   };
 
   const createGroupQuotes = function (e) {
     e.preventDefault();
-    if (!quoteForm.groupName) {
-      setErr("Group Name is required");
+    if (!groupQuotesForm.site) {
+      setErr("Group Site is required");
       return;
-    } else if (!quoteForm.groupSelect?.length) {
-      setErr("Please Select Group from list");
+    } else if (!groupQuotesForm.supplier) {
+      setErr("supplier is required");
+      return;
+    } else if (!groupQuotesForm.product) {
+      setErr("product is required");
+      return;
+    } else if (!groupQuotesForm.term) {
+      setErr("term is required");
+      return;
+    } else if (!groupQuotesForm.dayRate) {
+      setErr("Day Rate is required");
+      return;
+    } else if (!groupQuotesForm.nightRate) {
+      setErr("Night Rate is required");
+      return;
+    } else if (!groupQuotesForm.standingCharge) {
+      setErr("Standing Charge is required");
+      return;
+    } else if (!groupQuotesForm.kvaCharge) {
+      setErr("Kva Charge is required");
+      return;
+    } else if (!groupQuotesForm.upLift) {
+      setErr("Up Lift is required");
       return;
     }
-
     let sendData = {
-      group_detail: quoteForm.groupSelect?.map((data) => data.id),
-      group_name: quoteForm.groupName,
+      additional_charge: groupQuotesForm.additionalCharge,
+      day_rate: groupQuotesForm.dayRate,
+      extra_info: groupQuotesForm.extraInfo,
+      kva_charge: groupQuotesForm.kvaCharge,
+      night_rate: groupQuotesForm.nightRate,
+      product: groupQuotesForm.product,
+      rates_already_include_at_uplift: groupQuotesForm.rateIncludedInUplift,
+      // site: groupQuotesForm.site,
+      standing_charge: groupQuotesForm.standingCharge,
+      supplier: groupQuotesForm.supplier,
+      term: groupQuotesForm.term,
+      up_lift: groupQuotesForm.upLift,
     };
-
     setCompanyResponseData(null);
-    let url = `quote/group-quote/`,
+    let url = `quote/generate-quote/multisite/${groupQuotesForm.site}/`,
       method = "POST";
     if (props.quoteId) {
       url = `quote/group-quote/${props.quoteId}/`;
@@ -137,15 +176,19 @@ function GroupQuoteForm(props) {
         dispatchInputChange({
           all: true,
           data: {
-            groupName: responseGetcompanyData?.data?.group_name,
-            groupSelect: responseGetcompanyData?.data?.group_detail?.map(
-              (data) => {
-                return {
-                  id: data?.id,
-                  name: data?.supplier,
-                };
-              }
-            ),
+            // site: responseGetcompanyData?.data?.site?.id,
+            supplier: responseGetcompanyData?.data?.supplier,
+            product: responseGetcompanyData?.data?.product,
+            term: responseGetcompanyData?.data?.term,
+            dayRate: responseGetcompanyData?.data?.day_rate,
+            nightRate: responseGetcompanyData?.data?.night_rate,
+            standingCharge: responseGetcompanyData?.data?.standing_charge,
+            kvaCharge: responseGetcompanyData?.data?.kva_charge,
+            additionalCharge: responseGetcompanyData?.data?.additional_charge,
+            extraInfo: responseGetcompanyData?.data?.extra_info,
+            upLift: responseGetcompanyData?.data?.up_lift,
+            rateIncludedInUplift:
+              responseGetcompanyData?.data?.rates_already_include_at_uplift,
           },
         });
       }
@@ -163,52 +206,186 @@ function GroupQuoteForm(props) {
   }
   return (
     <div id="tabsSimple" className="col-xl-12 col-12 layout-spacing">
-    <NeumorphismWrapper>
-      <div className="widget-header">
-        <h4>{props.title}</h4>
-      </div>
-      <Form onSubmit={createGroupQuotes} className="row">
-      <MultiSelectBox
-          groupClass="mb-3 col-md-6 selectbox"
-          groupId="groupQuote"
-          label="Group Detail"
-          multiple={true}
-          value={quoteForm.groupSelect}
-          onSelect={(val) => {
-            handleSelectionChange(val);
-          }}
-          onRemove={(val) => {
-            handleSelectionChange(val);
-          }}
-          name="groupQuote"
-          isSearch={true}
-          objKey={["supplier"]}
-          url="quote/recent-quotes/"
-        />
-        <Form.Group className="mb-3 col-6" controlId="supplier">
-          <Form.Label>Group Name</Form.Label>
-          <Form.Control
-            type="text"
-            name="groupName"
-            value={quoteForm.groupName}
-            onChange={(e) =>
-              dispatchInputChange({
-                type: "groupName",
-                value: e.target.value,
-              })
-            }
-          />
-        </Form.Group>
-        <div className="col-md-12 text-center">
-          {err ? <p className="text-center red">{err}</p> : ""}
-          <Button type="submit">
-            {reqCompanyStatus.isLoading
-              ? `${btnTitle} Group Quotes`
-              : `${btnTitle} Group Quotes`}
-          </Button>
+      <NeumorphismWrapper>
+        <div className="widget-header"> 
+          <h4>{props.title}</h4>
         </div>
-      </Form>
-    </NeumorphismWrapper>
+        <Form onSubmit={createGroupQuotes} className="row">
+          <SelectionBox
+            groupClass="mb-3 col-md-6 selectbox"
+            groupId="groupQuote"
+            label="Group"
+            value={groupQuotesForm.site}
+            onChange={handleSelectionChange.bind(null, "site")}
+            name="site"
+            isSearch={true}
+            objKey="group_name"
+            url="multisite/?brief=True"
+          />
+          <Form.Group className="mb-3 col-6" controlId="supplier">
+            <Form.Label>Supplier</Form.Label>
+            <Form.Control
+              type="text"
+              name="supplier"
+              value={groupQuotesForm.supplier}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "supplier",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="product">
+            <Form.Label>Product</Form.Label>
+            <Form.Control
+              type="text"
+              name="product"
+              value={groupQuotesForm.product}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "product",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="term">
+            <Form.Label>Term</Form.Label>
+            <Form.Control
+              type="number"
+              name="term"
+              value={groupQuotesForm.term}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "term",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="dayRate">
+            <Form.Label>Day Rate (pence/kwh)</Form.Label>
+            <Form.Control
+              type="number"
+              name="dayRate"
+              value={groupQuotesForm.dayRate}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "dayRate",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="nightRate">
+            <Form.Label>Night Rate (pence/kwh)</Form.Label>
+            <Form.Control
+              type="number"
+              name="nightRate"
+              value={groupQuotesForm.nightRate}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "nightRate",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="standingCharge">
+            <Form.Label>Standing Charge (pence)</Form.Label>
+            <Form.Control
+              type="number"
+              name="standingCharge"
+              value={groupQuotesForm.standingCharge}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "standingCharge",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="kvaCharge">
+            <Form.Label>KVA Charge (pence)</Form.Label>
+            <Form.Control
+              type="number"
+              name="kvaCharge"
+              value={groupQuotesForm.kvaCharge}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "kvaCharge",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="name">
+            <Form.Label>Additional Charge(£)</Form.Label>
+            <Form.Control
+              type="number"
+              name="additionalCharge"
+              value={groupQuotesForm.additionalCharge}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "additionalCharge",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="extraInfo">
+            <Form.Label>Extra Info</Form.Label>
+            <Form.Control
+              type="text"
+              name="extraInfo"
+              value={groupQuotesForm.extraInfo}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "extraInfo",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="upLift">
+            <Form.Label>Up Lift</Form.Label>
+            <Form.Control
+              type="number"
+              name="upLift"
+              value={groupQuotesForm.upLift}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "upLift",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="name">
+            <Form.Check
+              type="switch"
+              id="custom-switch"
+              label="Rates Already Include At UpLift"
+              checked={groupQuotesForm.rateIncludedInUplift}
+              onChange={(e) => {
+                dispatchInputChange({
+                  type: "rateIncludedInUplift",
+                  value: e.target.checked,
+                });
+              }}
+            />
+          </Form.Group>
+          <div className="col-md-12 text-center">
+            {err ? <p className="text-center red">{err}</p> : ""}
+            <Button type="submit">
+              {reqCompanyStatus.isLoading
+                ? `${btnTitle} Group Quotes`
+                : `${btnTitle} Group Quotes`}
+            </Button>
+          </div>
+        </Form>
+      </NeumorphismWrapper>
     </div>
   );
 }

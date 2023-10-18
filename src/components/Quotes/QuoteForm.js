@@ -9,7 +9,7 @@ import LoadingData from "../UI/LoadingData";
 import SiteDetails from "./SiteDetails";
 import NeumorphismWrapper from "../UI/Layouts/NeumorphismWrapper";
 
-const initialSiteState = {
+const initialQuoteState = {
   site: "",
   supplier: "",
   product: "",
@@ -34,7 +34,7 @@ const QuoteReducer = (state, action) => {
 const QuoteForm = (props) => {
   const [quoteForm, dispatchInputChange] = useReducer(
     QuoteReducer,
-    initialSiteState
+    initialQuoteState
   );
 
   const [err, setErr] = useState("");
@@ -156,7 +156,6 @@ const QuoteForm = (props) => {
   useEffect(() => {
     if (props.quoteId && !responseGetcompanyData) {
       setCompanyGetResponseData(null);
-
       setCompanyGETData({
         ...companyGETData,
         url: `quote/generate-quote/${props.quoteId}/`,
@@ -211,191 +210,189 @@ const QuoteForm = (props) => {
         <h4>{props.title}</h4>
       </div>
       <div className="row">
-        <Form onSubmit={createQuotes} className="col-md-6">
-          <div className="row">
-            <SelectionBox
-              groupClass="mb-3 col-md-6 selectbox"
-              groupId="site"
-              label="Site Name"
-              value={quoteForm.site}
-              onChange={handleSelectionChange.bind(null, "site")}
-              name="site"
-              isSearch={true}
-              objKey="site_name"
-              url="sites/get/site/?brief=True"
+        <Form onSubmit={createQuotes} className="col-md-6 row">
+          <SelectionBox
+            groupClass="mb-3 col-md-6 selectbox"
+            groupId="site"
+            label="Site Name"
+            value={quoteForm.site}
+            onChange={handleSelectionChange.bind(null, "site")}
+            name="site"
+            isSearch={true}
+            objKey="site_name"
+            url="sites/get/site/?brief=True"
+          />
+          <Form.Group className="mb-3 col-6" controlId="supplier">
+            <Form.Label>Supplier</Form.Label>
+            <Form.Control
+              type="text"
+              name="supplier"
+              value={quoteForm.supplier}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "supplier",
+                  value: e.target.value,
+                })
+              }
             />
-            <Form.Group className="mb-3 col-6" controlId="supplier">
-              <Form.Label>Supplier</Form.Label>
-              <Form.Control
-                type="text"
-                name="supplier"
-                value={quoteForm.supplier}
-                onChange={(e) =>
-                  dispatchInputChange({
-                    type: "supplier",
-                    value: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3 col-6" controlId="product">
-              <Form.Label>Product</Form.Label>
-              <Form.Control
-                type="text"
-                name="product"
-                value={quoteForm.product}
-                onChange={(e) =>
-                  dispatchInputChange({
-                    type: "product",
-                    value: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3 col-6" controlId="term">
-              <Form.Label>Term</Form.Label>
-              <Form.Control
-                type="number"
-                name="term"
-                value={quoteForm.term}
-                onChange={(e) =>
-                  dispatchInputChange({
-                    type: "term",
-                    value: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3 col-6" controlId="dayRate">
-              <Form.Label>Day Rate (pence/kwh)</Form.Label>
-              <Form.Control
-                type="number"
-                name="dayRate"
-                value={quoteForm.dayRate}
-                onChange={(e) =>
-                  dispatchInputChange({
-                    type: "dayRate",
-                    value: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3 col-6" controlId="nightRate">
-              <Form.Label>Night Rate (pence/kwh)</Form.Label>
-              <Form.Control
-                type="number"
-                name="nightRate"
-                value={quoteForm.nightRate}
-                onChange={(e) =>
-                  dispatchInputChange({
-                    type: "nightRate",
-                    value: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3 col-6" controlId="standingCharge">
-              <Form.Label>Standing Charge (pence)</Form.Label>
-              <Form.Control
-                type="number"
-                name="standingCharge"
-                value={quoteForm.standingCharge}
-                onChange={(e) =>
-                  dispatchInputChange({
-                    type: "standingCharge",
-                    value: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3 col-6" controlId="kvaCharge">
-              <Form.Label>KVA Charge (pence)</Form.Label>
-              <Form.Control
-                type="number"
-                name="kvaCharge"
-                value={quoteForm.kvaCharge}
-                onChange={(e) =>
-                  dispatchInputChange({
-                    type: "kvaCharge",
-                    value: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3 col-6" controlId="name">
-              <Form.Label>Additional Charge(£)</Form.Label>
-              <Form.Control
-                type="number"
-                name="additionalCharge"
-                value={quoteForm.additionalCharge}
-                onChange={(e) =>
-                  dispatchInputChange({
-                    type: "additionalCharge",
-                    value: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3 col-6" controlId="extraInfo">
-              <Form.Label>Extra Info</Form.Label>
-              <Form.Control
-                type="text"
-                name="extraInfo"
-                value={quoteForm.extraInfo}
-                onChange={(e) =>
-                  dispatchInputChange({
-                    type: "extraInfo",
-                    value: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3 col-6" controlId="upLift">
-              <Form.Label>Up Lift</Form.Label>
-              <Form.Control
-                type="number"
-                name="upLift"
-                value={quoteForm.upLift}
-                onChange={(e) =>
-                  dispatchInputChange({
-                    type: "upLift",
-                    value: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3 col-6" controlId="name">
-              <Form.Check
-                type="switch"
-                id="custom-switch"
-                label="Rates Already Include At UpLift"
-                checked={quoteForm.rateIncludedInUplift}
-                onChange={(e) => {
-                  dispatchInputChange({
-                    type: "rateIncludedInUplift",
-                    value: e.target.checked,
-                  });
-                }}
-              />
-            </Form.Group>
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="product">
+            <Form.Label>Product</Form.Label>
+            <Form.Control
+              type="text"
+              name="product"
+              value={quoteForm.product}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "product",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="term">
+            <Form.Label>Term</Form.Label>
+            <Form.Control
+              type="number"
+              name="term"
+              value={quoteForm.term}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "term",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="dayRate">
+            <Form.Label>Day Rate (pence/kwh)</Form.Label>
+            <Form.Control
+              type="number"
+              name="dayRate"
+              value={quoteForm.dayRate}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "dayRate",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="nightRate">
+            <Form.Label>Night Rate (pence/kwh)</Form.Label>
+            <Form.Control
+              type="number"
+              name="nightRate"
+              value={quoteForm.nightRate}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "nightRate",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="standingCharge">
+            <Form.Label>Standing Charge (pence)</Form.Label>
+            <Form.Control
+              type="number"
+              name="standingCharge"
+              value={quoteForm.standingCharge}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "standingCharge",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="kvaCharge">
+            <Form.Label>KVA Charge (pence)</Form.Label>
+            <Form.Control
+              type="number"
+              name="kvaCharge"
+              value={quoteForm.kvaCharge}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "kvaCharge",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="name">
+            <Form.Label>Additional Charge(£)</Form.Label>
+            <Form.Control
+              type="number"
+              name="additionalCharge"
+              value={quoteForm.additionalCharge}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "additionalCharge",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="extraInfo">
+            <Form.Label>Extra Info</Form.Label>
+            <Form.Control
+              type="text"
+              name="extraInfo"
+              value={quoteForm.extraInfo}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "extraInfo",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="upLift">
+            <Form.Label>Up Lift</Form.Label>
+            <Form.Control
+              type="number"
+              name="upLift"
+              value={quoteForm.upLift}
+              onChange={(e) =>
+                dispatchInputChange({
+                  type: "upLift",
+                  value: e.target.value,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 col-6" controlId="name">
+            <Form.Check
+              type="switch"
+              id="custom-switch"
+              label="Rates Already Include At UpLift"
+              checked={quoteForm.rateIncludedInUplift}
+              onChange={(e) => {
+                dispatchInputChange({
+                  type: "rateIncludedInUplift",
+                  value: e.target.checked,
+                });
+              }}
+            />
+          </Form.Group>
+          <div className="col-md-12 text-center">
             {err ? <p className="text-center red">{err}</p> : ""}
             <Button type="submit">
               {reqCompanyStatus.isLoading
                 ? `${btnTitle} Quotes`
                 : `${btnTitle} Quotes`}
             </Button>
-          </div>{" "}
+          </div>
         </Form>
-        {quoteForm.site && props.quoteId ? (
+        {quoteForm.site && (
           <div className="col-md-6">
             <SiteDetails siteId={quoteForm.site} />
           </div>
-        ) : (
-          ""
         )}
       </div>
     </NeumorphismWrapper>
   );
-}
+};
 
 export default QuoteForm;
