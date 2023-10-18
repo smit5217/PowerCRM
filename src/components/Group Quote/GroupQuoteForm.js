@@ -1,29 +1,41 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import NeumorphismWrapper from "../UI/Layouts/NeumorphismWrapper";
 import { Button, Form } from "react-bootstrap";
 import LoadingData from "../UI/LoadingData";
-import { useNavigate, useParams } from "react-router-dom";
+import { uiAction } from "../../store/uiStore";
+import { useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
+import { useDispatch } from "react-redux";
 import MultiSelectBox from "../UI/Form/MultiSelectBox";
 
+const initialSiteState = {
+  groupName: "",
+  groupSelect: [],
+};
+
+const QuoteReducer = (state, action) => {
+  if (action?.all) {
+    return action.data;
+  }
+  return { ...state, [action.type]: action.value };
+};
+
 function GroupQuoteForm(props) {
-  const [formData, setFormData] = useState({
-    groupName: "",
-    groupSelect: [],
-  });
+  const [quoteForm, dispatchInputChange] = useReducer(
+    QuoteReducer,
+    initialSiteState
+  );
 
-  const groupQuoteId = useParams().groupQuoteId;
-  const navigate = useNavigate();
   const [err, setErr] = useState("");
-  const [msg, setMsg] = useState("");
-  const occurance = useRef(1);
 
+  const dispatch = useDispatch();
   const [
     sendcompanyData,
     setCompanyReqData,
     reqCompanyStatus,
     responsecompanyData,
     setCompanyResponseData,
+    setStatus,
   ] = useFetch();
 
   const [
@@ -34,65 +46,33 @@ function GroupQuoteForm(props) {
     setCompanyGetResponseData,
   ] = useFetch();
 
-  useEffect(() => {
-    if (responseGetcompanyData) {
-      occurance.current += 1;
-      setFormData({
-        groupName: responseGetcompanyData?.data?.group_name,
-        groupSelect: responseGetcompanyData?.data?.group_detail?.map((data) => {
-          return {
-            id: data?.id,
-            name: data?.supplier,
-          };
-        }),
-      });
-    }
-  }, [responseGetcompanyData]);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    setMsg("");
-    setErr("");
-
-    occurance.current += 1;
-    if (groupQuoteId) {
-      setCompanyGetResponseData(null);
-      setCompanyGETData({
-        ...companyGETData,
-        url: `quote/group-quote/${groupQuoteId}/`,
-        fetchObj: {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        },
-        isAuthNeeded: true,
-        expectStatusCode: [200, 201],
-      });
-    } else {
-      setFormData({ groupName: "", groupSelect: [] });
-    }
-  }, [groupQuoteId]);
+  const handleSelectionChange = function (value) {
+    dispatchInputChange({ type: "groupSelect", value });
+  };
 
   const createGroupQuotes = function (e) {
     e.preventDefault();
-    if (!formData.groupName) {
+    if (!quoteForm.groupName) {
       setErr("Group Name is required");
       return;
-    } else if (!formData.groupSelect?.length) {
+    } else if (!quoteForm.groupSelect?.length) {
       setErr("Please Select Group from list");
       return;
     }
-    let body = {
-      group_detail: formData.groupSelect?.map((data) => data.id),
-      group_name: formData.groupName,
+
+    let sendData = {
+      group_detail: quoteForm.groupSelect?.map((data) => data.id),
+      group_name: quoteForm.groupName,
     };
+
     setCompanyResponseData(null);
-    let method = "POST",
-      url = `quote/group-quote/`;
-    if (groupQuoteId) {
+    let url = `quote/group-quote/`,
+      method = "POST";
+    if (props.quoteId) {
+      url = `quote/group-quote/${props.quoteId}/`;
       method = "PATCH";
-      url = `quote/group-quote/${groupQuoteId}/`;
     }
     setCompanyReqData({
       ...sendcompanyData,
@@ -103,7 +83,7 @@ function GroupQuoteForm(props) {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify(sendData),
       },
       isAuthNeeded: true,
       expectStatusCode: [200, 201],
@@ -116,23 +96,63 @@ function GroupQuoteForm(props) {
         responsecompanyData.status === 200 ||
         responsecompanyData.status === 201
       ) {
-        setMsg(
-          !groupQuoteId
-            ? "Group quotes Created Succesfully"
-            : "Group quotes Edited Succesfully"
+        navigate("/group-quotes");
+        dispatch(
+          uiAction.setNotification({
+            show: true,
+            heading: "Quote",
+            msg: `${
+              props.isEdit
+                ? "Group Quote Edited Succesfully"
+                : "Group Quote Created Succesfully"
+            }`,
+          })
         );
-        props.refreshTableEditMode();
-        setFormData({ groupName: "", groupSelect: [] });
-        if (groupQuoteId) {
-          navigate("/group-quotes");
-        }
       } else {
         setErr("Some Proble Occured, Please try again");
       }
     }
   }, [responsecompanyData]);
 
-  const btnTitle = groupQuoteId ? "Edit" : "Create";
+  useEffect(() => {
+    if (props.quoteId && !responseGetcompanyData) {
+      setCompanyGetResponseData(null);
+
+      setCompanyGETData({
+        ...companyGETData,
+        url: `quote/group-quote/${props.quoteId}/`,
+        fetchObj: {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        },
+        isAuthNeeded: true,
+        expectStatusCode: [200, 201],
+      });
+    }
+    if (responseGetcompanyData) {
+      if (responseGetcompanyData?.status === 200) {
+        dispatchInputChange({
+          all: true,
+          data: {
+            groupName: responseGetcompanyData?.data?.group_name,
+            groupSelect: responseGetcompanyData?.data?.group_detail?.map(
+              (data) => {
+                return {
+                  id: data?.id,
+                  name: data?.supplier,
+                };
+              }
+            ),
+          },
+        });
+      }
+    }
+  }, [props.quoteId, responseGetcompanyData]);
+
+  const btnTitle = props.quoteId ? "Edit" : "Create";
 
   if (reqGetCompanyStatus.isLoading) {
     return (
@@ -143,56 +163,52 @@ function GroupQuoteForm(props) {
   }
   return (
     <div id="tabsSimple" className="col-xl-12 col-12 layout-spacing">
-      <NeumorphismWrapper>
-        <div className="widget-header">
-          <h4>{props.title}</h4>
-        </div>
-        <Form onSubmit={createGroupQuotes} className="row">
-          <Form.Group className="mb-3 col-6" controlId="supplier">
-            <Form.Label>Group Name</Form.Label>
-            <Form.Control
-              type="text"
-              name="groupName"
-              value={formData.groupName}
-              onChange={(e) =>
-                setFormData((prev) => {
-                  return { ...prev, groupName: e.target.value };
-                })
-              }
-            />
-          </Form.Group>
-          <MultiSelectBox
-            groupClass="mb-3 col-md-6"
-            groupId="parentCompany"
-            label="Group Detail"
-            multiple={true}
-            value={formData.groupSelect}
-            onSelect={(val) => {
-              setFormData((prev) => {
-                return { ...prev, groupSelect: val };
-              });
-            }}
-            onRemove={(val) => {
-              setFormData((prev) => {
-                return { ...prev, groupSelect: val };
-              });
-            }}
-            name="parentCompany"
-            isSearch={true}
-            objKey={["supplier"]}
-            url="quote/recent-quotes/"
+    <NeumorphismWrapper>
+      <div className="widget-header">
+        <h4>{props.title}</h4>
+      </div>
+      <Form onSubmit={createGroupQuotes} className="row">
+      <MultiSelectBox
+          groupClass="mb-3 col-md-6 selectbox"
+          groupId="groupQuote"
+          label="Group Detail"
+          multiple={true}
+          value={quoteForm.groupSelect}
+          onSelect={(val) => {
+            handleSelectionChange(val);
+          }}
+          onRemove={(val) => {
+            handleSelectionChange(val);
+          }}
+          name="groupQuote"
+          isSearch={true}
+          objKey={["supplier"]}
+          url="quote/recent-quotes/"
+        />
+        <Form.Group className="mb-3 col-6" controlId="supplier">
+          <Form.Label>Group Name</Form.Label>
+          <Form.Control
+            type="text"
+            name="groupName"
+            value={quoteForm.groupName}
+            onChange={(e) =>
+              dispatchInputChange({
+                type: "groupName",
+                value: e.target.value,
+              })
+            }
           />
-          <div className="col-md-12 text-center">
-            {err ? <p className="text-center red">{err}</p> : ""}
-            {msg?.length ? <p className="">{msg}</p> : ""}
-            <Button type="submit">
-              {reqCompanyStatus.isLoading
-                ? `${btnTitle} Group Quotes`
-                : `${btnTitle} Group Quotes`}
-            </Button>
-          </div>
-        </Form>
-      </NeumorphismWrapper>
+        </Form.Group>
+        <div className="col-md-12 text-center">
+          {err ? <p className="text-center red">{err}</p> : ""}
+          <Button type="submit">
+            {reqCompanyStatus.isLoading
+              ? `${btnTitle} Group Quotes`
+              : `${btnTitle} Group Quotes`}
+          </Button>
+        </div>
+      </Form>
+    </NeumorphismWrapper>
     </div>
   );
 }

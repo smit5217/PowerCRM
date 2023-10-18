@@ -4,7 +4,7 @@ import { Form } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import useFetch from "../../../hooks/useFetch";
 
-function MultiSelectBox(props) {
+const MultiSelectBox = (props) => {
   const authData = useSelector((state) => state.authStore);
   const [options, setOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,7 +81,7 @@ function MultiSelectBox(props) {
   
   return (
     <Form.Group className={props.groupClass} controlId={props.groupId}>
-      <Form.Label>{props.label}</Form.Label>
+      <Form.Label className="text-center itsBlock">{props.label}</Form.Label>
       <Multiselect
         options={options}
         selectedValues={props.value}

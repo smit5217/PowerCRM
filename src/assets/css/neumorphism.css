@@ -27622,9 +27622,11 @@ textarea[resize="horizontal"] {
   background: 0 0;
   z-index: 2;
 }
-.card-body {
+
+/* .card-body {
   z-index: 2;
-}
+} */
+
 .pricing-value {
   width: 150px;
   height: 150px;
