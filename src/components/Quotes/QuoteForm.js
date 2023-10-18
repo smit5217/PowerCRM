@@ -31,7 +31,7 @@ const QuoteReducer = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-function QuoteForm(props) {
+const QuoteForm = (props) => {
   const [quoteForm, dispatchInputChange] = useReducer(
     QuoteReducer,
     initialSiteState
@@ -58,12 +58,12 @@ function QuoteForm(props) {
   ] = useFetch();
 
   const navigate = useNavigate();
-  
+
   const handleSelectionChange = function (type, value) {
     dispatchInputChange({ type, value });
   };
 
-  const submitData = function (e) {
+  const createQuotes = function (e) {
     e.preventDefault();
     if (!quoteForm.site) {
       setErr("Site Name is required");
@@ -195,6 +195,8 @@ function QuoteForm(props) {
     }
   }, [props.quoteId, responseGetcompanyData]);
 
+  const btnTitle = props.quoteId ? "Edit" : "Create";
+
   if (reqGetCompanyStatus.isLoading) {
     return (
       <div className="text-center">
@@ -202,13 +204,14 @@ function QuoteForm(props) {
       </div>
     );
   }
+
   return (
     <NeumorphismWrapper>
       <div className="widget-header">
         <h4>{props.title}</h4>
       </div>
       <div className="row">
-        <Form onSubmit={submitData} className="col-md-6">
+        <Form onSubmit={createQuotes} className="col-md-6">
           <div className="row">
             <SelectionBox
               groupClass="mb-3 col-md-6 selectbox"
@@ -377,12 +380,13 @@ function QuoteForm(props) {
             </Form.Group>
             {err ? <p className="text-center red">{err}</p> : ""}
             <Button type="submit">
-              {reqCompanyStatus.isLoading ? "Submitting" : "Submit"}
+              {reqCompanyStatus.isLoading
+                ? `${btnTitle} Quotes`
+                : `${btnTitle} Quotes`}
             </Button>
           </div>{" "}
         </Form>
-
-        {quoteForm.site ? (
+        {quoteForm.site && props.quoteId ? (
           <div className="col-md-6">
             <SiteDetails siteId={quoteForm.site} />
           </div>

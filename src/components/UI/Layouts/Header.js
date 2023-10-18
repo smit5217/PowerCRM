@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-function Header(props) {
+const Header = (props) => {
   const location = useLocation().pathname;
 
   const breadcrumb = () => {
@@ -33,6 +33,16 @@ function Header(props) {
             <div className="text-right mb-3">
               <Link to="/quotes/add" className="btn btn-primary">
                 Add Quote
+              </Link>
+            </div>
+          ) : (
+            ""
+          )}
+
+          {location === "/group-quotes" ? (
+            <div className="text-right mb-3">
+              <Link to="/group-quotes/add" className="btn btn-primary">
+                Add Group Quotes
               </Link>
             </div>
           ) : (

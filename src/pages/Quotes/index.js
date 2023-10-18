@@ -86,7 +86,7 @@ export const quoteColumns = [
   },
 ];
 
-const  Quote = () => {
+const Quote = () => {
   const [refreshTable, setRefreshTable] = useState(true);
   const [cols, setCols, changeCols, renderColBtns] = useDTColumns(quoteColumns);
 

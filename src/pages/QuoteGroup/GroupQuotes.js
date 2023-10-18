@@ -5,9 +5,10 @@ import useDTColumns from "../../hooks/useDTColumns";
 import NeumorphismWrapper from "../../components/UI/Layouts/NeumorphismWrapper";
 import UiModal from "../../components/UI/UiModal";
 import SitesDT from "../../components/Group Sites/SitesDT";
-import GroupQuoteForm from "../../components/Group Quote/GroupQuoteForm";
 
 const GroupQuotes = () => {
+  const [refreshTable, setRefreshTable] = useState(true);
+
   const [showSites, SetShowSites] = useState({
     total: null,
     show: false,
@@ -15,9 +16,9 @@ const GroupQuotes = () => {
     groupId: "",
   });
 
-  const [refreshTable, setRefreshTable] = useState(true);
-  const hideModal = () =>
-  SetShowSites({ total: null, show: false, sites: [], groupId: "" });
+  const DTableFunction = function (data) {
+    return data;
+  };
 
   const columns = [
     {
@@ -69,22 +70,17 @@ const GroupQuotes = () => {
       selector: (row) => row.group_name,
     },
   ];
- 
+  const hideModal = () =>
+    SetShowSites({ total: null, show: false, sites: [], groupId: "" });
+
   const [cols, setCols, changeCols, renderColBtns] = useDTColumns(columns);
-  const DTableFunction = function (data) {
-    return data;
-  };
 
   const refreshTableEditMode = function () {
     setRefreshTable(true);
   };
-  const openPopup = function () {};
+
   return (
     <>
-      <GroupQuoteForm
-        setRefreshTable={setRefreshTable}
-        refreshTableEditMode={refreshTableEditMode}
-      />
       {showSites.show ? (
         <UiModal
           showStatus={showSites.show}
@@ -100,7 +96,6 @@ const GroupQuotes = () => {
         {renderColBtns()}
         <DTable
           url="quote/group-quote/?ordering=-date_created"
-          openPopup={openPopup}
           transformFunction={DTableFunction}
           columns={cols}
           refreshTable={refreshTable}
@@ -109,6 +104,6 @@ const GroupQuotes = () => {
       </NeumorphismWrapper>
     </>
   );
-};
+}
 
 export default GroupQuotes;
