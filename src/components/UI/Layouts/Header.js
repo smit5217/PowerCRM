@@ -29,25 +29,6 @@ const Header = (props) => {
           <div className="search-animated toggle-search">
             <span className="badge badge-secondary">{breadcrumb()}</span>
           </div>
-          {location === "/quotes" ? (
-            <div className="text-right mb-3">
-              <Link to="/quotes/add" className="btn btn-primary">
-                Add Quote
-              </Link>
-            </div>
-          ) : (
-            ""
-          )}
-
-          {location === "/group-quotes" ? (
-            <div className="text-right mb-3">
-              <Link to="/group-quotes/add" className="btn btn-primary">
-                Add Group Quotes
-              </Link>
-            </div>
-          ) : (
-            ""
-          )}
         </header>
       </div>
     </>

@@ -94,6 +94,11 @@ const Quote = () => {
     <>
       <NeumorphismWrapper>
         {renderColBtns()}
+        <div className="text-right mb-3">
+          <Link to="/quotes/add" className="btn btn-primary">
+            Add Quote
+          </Link>
+        </div>
         <DTable
           url="quote/generate-quote/?ordering=-date_created"
           transformFunction={DTableFunction}
@@ -104,6 +109,6 @@ const Quote = () => {
       </NeumorphismWrapper>
     </>
   );
-}
+};
 
 export default Quote;
