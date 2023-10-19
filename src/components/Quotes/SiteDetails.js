@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import LoadingData from "../UI/LoadingData";
 
-function SiteDetails(props) {
+const SiteDetails = (props) => {
   const [siteData, setSiteData] = useState();
   const [
     companyGetData,
@@ -13,7 +13,7 @@ function SiteDetails(props) {
   ] = useFetch();
 
   useEffect(() => {
-    if (props.siteId && !responseGetCompanyData) {
+    if (props.siteId) {
       setCompanyGetResponseData(null);
       setCompanyGetData({
         ...companyGetData,
@@ -29,12 +29,15 @@ function SiteDetails(props) {
         expectStatusCode: [200, 201],
       });
     }
-    if (responseGetCompanyData) {
-      if (responseGetCompanyData.status === 200) {
-        setSiteData(responseGetCompanyData.data);
+  }, [props.siteId]);
+
+  useEffect(()=>{
+    if(responseGetCompanyData){
+      if(responseGetCompanyData.status === 200){
+        setSiteData(responseGetCompanyData.data)
       }
     }
-  }, [props.siteId, responseGetCompanyData]);
+  },[responseGetCompanyData])
   
   if (reqGetCompanyStatus.isLoading) {
     return (
