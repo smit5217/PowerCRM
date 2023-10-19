@@ -201,7 +201,7 @@ function GroupSiteForm(props) {
               objKey={["site_name"]}
               url={
                 formData.company
-                  ? `sites/get/site/?company=${formData.company}&brief=True`
+                  ? `sites/get/site/?company=${formData.company}&pagination=false&brief=True`
                   : ""
               }
             />

@@ -5,18 +5,18 @@ import LoadingData from "../UI/LoadingData";
 function SiteDetails(props) {
   const [siteData, setSiteData] = useState();
   const [
-    companyGETData,
-    setCompanyGETData,
+    companyGetData,
+    setCompanyGetData,
     reqGetCompanyStatus,
-    responseGetcompanyData,
+    responseGetCompanyData,
     setCompanyGetResponseData,
   ] = useFetch();
 
   useEffect(() => {
-    if (props.siteId && !responseGetcompanyData) {
+    if (props.siteId && !responseGetCompanyData) {
       setCompanyGetResponseData(null);
-      setCompanyGETData({
-        ...companyGETData,
+      setCompanyGetData({
+        ...companyGetData,
         url: `sites/update/site/${props.siteId}/`,
         fetchObj: {
           method: "GET",
@@ -29,12 +29,12 @@ function SiteDetails(props) {
         expectStatusCode: [200, 201],
       });
     }
-    if (responseGetcompanyData) {
-      if (responseGetcompanyData.status === 200) {
-        setSiteData(responseGetcompanyData.data);
+    if (responseGetCompanyData) {
+      if (responseGetCompanyData.status === 200) {
+        setSiteData(responseGetCompanyData.data);
       }
     }
-  }, [props.siteId, responseGetcompanyData]);
+  }, [props.siteId, responseGetCompanyData]);
   
   if (reqGetCompanyStatus.isLoading) {
     return (
