@@ -4,7 +4,7 @@ import LoadingData from "../UI/LoadingData";
 import { Tab, Table, Tabs } from "react-bootstrap";
 
 const MultiSiteDetails = ({ siteId }) => {
-  const [multiSiteData, setMultiSiteData] = useState("");
+  const [multiSiteData, setMultiSiteData] = useState();
 
   const [
     companyGetData,
@@ -15,7 +15,7 @@ const MultiSiteDetails = ({ siteId }) => {
   ] = useFetch();
 
   useEffect(() => {
-    if (siteId && !responseGetCompanyData) {
+    if (siteId) {
       setCompanyGetResponseData(null);
       setCompanyGetData({
         ...companyGetData,
@@ -31,12 +31,15 @@ const MultiSiteDetails = ({ siteId }) => {
         expectStatusCode: [200, 201],
       });
     }
+  }, [siteId]);
+
+  useEffect(() => {
     if (responseGetCompanyData) {
       if (responseGetCompanyData.status === 200) {
         setMultiSiteData(responseGetCompanyData.data);
       }
     }
-  }, [siteId,responseGetCompanyData]);
+  }, [responseGetCompanyData]);
 
   if (reqGetCompanyStatus.isLoading) {
     return (

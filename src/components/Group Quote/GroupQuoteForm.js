@@ -100,7 +100,6 @@ const GroupQuoteForm = (props) => {
       night_rate: groupQuotesForm.nightRate,
       product: groupQuotesForm.product,
       rates_already_include_at_uplift: groupQuotesForm.rateIncludedInUplift,
-      // site: groupQuotesForm.site,
       standing_charge: groupQuotesForm.standingCharge,
       supplier: groupQuotesForm.supplier,
       term: groupQuotesForm.term,
@@ -156,7 +155,6 @@ const GroupQuoteForm = (props) => {
   useEffect(() => {
     if (props.quoteId && !responseGetcompanyData) {
       setCompanyGetResponseData(null);
-
       setCompanyGETData({
         ...companyGETData,
         url: `quote/group-quote/${props.quoteId}/`,
@@ -176,7 +174,6 @@ const GroupQuoteForm = (props) => {
         dispatchInputChange({
           all: true,
           data: {
-            // site: responseGetcompanyData?.data?.site?.id,
             supplier: responseGetcompanyData?.data?.supplier,
             product: responseGetcompanyData?.data?.product,
             term: responseGetcompanyData?.data?.term,
