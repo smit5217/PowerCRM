@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import { useDispatch } from "react-redux";
 import SelectionBox from "../Form/SelectionBox";
+import MultiSiteDetails from "./MultiSiteDetails";
 
 const initialGroupQuotesState = {
   site: "",
@@ -40,12 +41,11 @@ const GroupQuoteForm = (props) => {
 
   const dispatch = useDispatch();
   const [
-    sendcompanyData,
+    sendCompanyData,
     setCompanyReqData,
     reqCompanyStatus,
-    responsecompanyData,
+    responseCompanyData,
     setCompanyResponseData,
-    setStatus,
   ] = useFetch();
 
   const [
@@ -58,7 +58,7 @@ const GroupQuoteForm = (props) => {
 
   const navigate = useNavigate();
 
-  const handleSelectionChange = function (type,value) {
+  const handleSelectionChange = function (type, value) {
     dispatchInputChange({ type, value });
   };
 
@@ -114,7 +114,7 @@ const GroupQuoteForm = (props) => {
       method = "PATCH";
     }
     setCompanyReqData({
-      ...sendcompanyData,
+      ...sendCompanyData,
       url,
       fetchObj: {
         method,
@@ -130,10 +130,10 @@ const GroupQuoteForm = (props) => {
   };
 
   useEffect(() => {
-    if (responsecompanyData) {
+    if (responseCompanyData) {
       if (
-        responsecompanyData.status === 200 ||
-        responsecompanyData.status === 201
+        responseCompanyData.status === 200 ||
+        responseCompanyData.status === 201
       ) {
         navigate("/group-quotes");
         dispatch(
@@ -151,7 +151,7 @@ const GroupQuoteForm = (props) => {
         setErr("Some Proble Occured, Please try again");
       }
     }
-  }, [responsecompanyData]);
+  }, [responseCompanyData]);
 
   useEffect(() => {
     if (props.quoteId && !responseGetcompanyData) {
@@ -207,7 +207,7 @@ const GroupQuoteForm = (props) => {
   return (
     <div id="tabsSimple" className="col-xl-12 col-12 layout-spacing">
       <NeumorphismWrapper>
-        <div className="widget-header"> 
+        <div className="widget-header">
           <h4>{props.title}</h4>
         </div>
         <Form onSubmit={createGroupQuotes} className="row">
@@ -386,8 +386,15 @@ const GroupQuoteForm = (props) => {
           </div>
         </Form>
       </NeumorphismWrapper>
+      {groupQuotesForm.site && (
+        <NeumorphismWrapper>
+          <div className="col-md-6">
+            <MultiSiteDetails siteId={groupQuotesForm.site} />
+          </div>
+        </NeumorphismWrapper>
+      )}
     </div>
   );
-}
+};
 
 export default GroupQuoteForm;

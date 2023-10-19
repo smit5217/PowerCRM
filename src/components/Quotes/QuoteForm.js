@@ -220,7 +220,7 @@ const QuoteForm = (props) => {
             name="site"
             isSearch={true}
             objKey="site_name"
-            url="sites/get/site/?brief=True"
+            url="sites/get/site/?pagination=false&brief=true"
           />
           <Form.Group className="mb-3 col-6" controlId="supplier">
             <Form.Label>Supplier</Form.Label>
