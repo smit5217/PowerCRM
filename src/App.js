@@ -1,10 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/custom.css";
 import "./assets/css/neumorphism.css";
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Base from "./components/Base";
 import ErrorBoundary from "./components/ErrorBoundry";
@@ -15,7 +12,7 @@ import MultiSiteQuote from "./pages/Sites/MultiSiteQuote";
 import Companies from "./pages/Companies";
 import EditCompany from "./pages/Companies/EditCompany";
 import NewForm from "./pages/FormPage";
-import GroupSites from "./pages/GroupSites";
+import GroupSites from "./pages/GroupSites/GroupSites";
 import DashboardCompany from "./pages/Companies/DashboardCompany";
 import DashboardSite from "./pages/Sites/DashboardSite";
 import AddQuote from "./pages/Quotes/AddQuote";
@@ -24,6 +21,7 @@ import EditQuote from "./pages/Quotes/EditQuote";
 import GroupQuotes from "./pages/QuoteGroup/GroupQuotes";
 import AddGroupQuote from "./pages/QuoteGroup/AddGroupQuote";
 import EditGroupQuote from "./pages/QuoteGroup/EditGroupQuote";
+import Notes from "./pages/Notes/Notes";
 
 const router = createBrowserRouter(
   [
@@ -98,6 +96,14 @@ const router = createBrowserRouter(
         {
           path: "group-quotes/edit/:quoteId",
           element: <EditGroupQuote />,
+        },
+        {
+          path: "notes",
+          element: <Notes />,
+        },
+        {
+          path: "notes/edit/:noteId",
+          element: <Notes />,
         },
       ],
     },

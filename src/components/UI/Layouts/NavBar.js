@@ -77,6 +77,9 @@ const NavBar = () => {
                 <Nav.Link as={NavLink} to="/group-quotes">
                   Group Quotes
                 </Nav.Link>
+                <Nav.Link as={NavLink} to="/notes">
+                  Notes
+                </Nav.Link>
               </Nav>
             </Navbar>
             <Nav.Link as={Button} onClick={logout}>

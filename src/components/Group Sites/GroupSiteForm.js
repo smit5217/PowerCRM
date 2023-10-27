@@ -56,7 +56,6 @@ function GroupSiteForm(props) {
   useEffect(() => {
     setMsg("");
     setErr("");
-
     occurance.current += 1;
     if (groupSiteId) {
       setCompanyGetResponseData(null);
@@ -164,7 +163,7 @@ function GroupSiteForm(props) {
                   })
                 }
               />
-            </Form.Group>
+            </Form.Group> 
             <SelectionBox
               groupClass="mb-3 col-md-3 selectbox"
               groupId="companyName"
