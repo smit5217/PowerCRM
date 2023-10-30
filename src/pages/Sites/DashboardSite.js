@@ -92,12 +92,18 @@ const DashboardSite = () => {
                     Welcome Letter Sent :{" "}
                     {siteData?.welcome_letter_send ? "Yes" : "No"}
                   </td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th>Letter Of Authority</th>
                   <td>Agent Email : {siteData?.agent_email}</td>
                   <td>LOA Header To Use : {siteData?.loa_header_to_use}</td>
                   <td>LOA Template : {siteData?.loa_template}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th>Site Address</th>
@@ -115,6 +121,8 @@ const DashboardSite = () => {
                   </td>
                   <td>Postcode : {siteData?.site_address?.postcode}</td>
                   <td>Country : {siteData?.site_address?.country}</td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>  
                   <th>Billing Address</th>
@@ -132,6 +140,8 @@ const DashboardSite = () => {
                   </td>
                   <td>Postcode : {siteData?.billing_address?.postcode}</td> 
                   <td>Country : {siteData?.billing_address?.country}</td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>  
                   <th>Contact</th>
@@ -143,6 +153,8 @@ const DashboardSite = () => {
                     Telephone Number : {siteData?.contacts?.telephone_number}
                   </td>
                   <td>Email : {siteData?.contacts?.email}</td>
+                  <td></td>
+                  <td></td>
                 </tr>
               </Table>
             </Tab>

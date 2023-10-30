@@ -91,6 +91,8 @@ const DashboardCompany = () => {
                   <td>Address Line 3 : {companyData?.addressline3_company}</td>
                   <td>Postcode : {companyData?.postcode}</td>
                   <td>Country : {companyData?.country_of_company}</td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th>Bank Details</th>
@@ -99,6 +101,8 @@ const DashboardCompany = () => {
                   <td>Account No : {companyData?.account_no}</td>
                   <td>Shortcode : {companyData?.shortcode}</td>
                   <td>SIC Code : {companyData?.sic_code}</td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th>Partner Details</th>
@@ -114,6 +118,7 @@ const DashboardCompany = () => {
                     Time At Address (Months) :{" "}
                     {companyData?.time_at_address_months}
                   </td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th>Contact</th>
@@ -127,6 +132,7 @@ const DashboardCompany = () => {
                     Telephone Number : {companyData?.contacts?.telephone_number}
                   </td>
                   <td>Email : {companyData?.contacts?.email}</td>
+                  <td></td>
                 </tr>
               </Table>
             </Tab>

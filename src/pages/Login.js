@@ -1,14 +1,12 @@
 import React, { useState, useReducer, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link, json } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Button from "../components/UI/Form/Button";
 import InputBox from "../components/UI/Form/InputBox";
 import Notification from "../components/UI/Notification";
 import { setToLocalStorage } from "../helpers/helperFunctions";
 import { Form } from "react-bootstrap";
 import useFetch from "../hooks/useFetch";
-import useAuthAction from "../hooks/useAuthAction";
-import useUiAction from "../hooks/useUiAction";
 import { uiAction } from "../store/uiStore";
 import { authAction } from "../store/authStore";
 
@@ -39,10 +37,6 @@ function Login() {
     responseData,
     setResponseData,
   ] = useFetch();
-
-  //   custom hooks for store reducer function
-  const authDispatcher = useAuthAction();
-  const uiDispatcher = useUiAction();
 
   // dispatch redux store
   const dispatch = useDispatch();
@@ -101,7 +95,6 @@ function Login() {
 
   //  we did the req in doLogin now status will be changed through useEffect
   useEffect(() => {
-    // console.log("responsedata is", responseData);
     if (responseData) {
       dispatchInputChange({
         type: "submitBtn",
@@ -153,11 +146,6 @@ function Login() {
             <div className="row ">
               <div className="col-md-12 col-12 d-flex flex-row align-self-center mx-auto flexCols">
                 <div className="text-center">
-                  {/* <img
-                    src="https://www.oecindia.com/assets/images/finalpic.png"
-                    alt="OEC CRM Logo"
-                    className="logo-login"
-                  /> */}
                   <h1>PowerCRM</h1>
                 </div>
                 <div className="card mt-3 mb-3 neumorphism-box nmb">
@@ -200,10 +188,7 @@ function Login() {
                               )}
 
                               <div className="text-center">
-                                <p
-                                  className="text-warning forgotPass"
-                                  onClick={changeForm}
-                                >
+                                <p className="forgotPass" onClick={changeForm}>
                                   Forgot Password?
                                 </p>
                               </div>
@@ -221,9 +206,9 @@ function Login() {
                           </Form>
                         </>
                       ) : (
-                        <div className="forgotPass-form hideForm">
-                          <div className="col-md-12 mb-3 forgotPass-form hideForm">
-                            <h2>Forgot Password</h2>
+                        <div>
+                          <div className="col-md-12 mb-3">
+                            <h2 className="text-center">Forgot Password</h2>
                             <p>
                               Enter your email id to get reset Password link
                             </p>
@@ -239,15 +224,10 @@ function Login() {
                               reducerName="forgotEmail"
                             />
                           </div>
-                          {/* {errorresetPass.length ? (
-                            <p style={{ color: "red" }}>{errorresetPass}</p>
-                          ) : (
-                            ""
-                          )} */}
                           <div className="col-12">
                             <div className="text-center">
                               <p
-                                className="text-warning returnToLogin"
+                                className="forgotPass"
                                 onClick={changeForm}
                               >
                                 Return To Login Form
@@ -258,24 +238,12 @@ function Login() {
                             <Button
                               divClassName="mb-4"
                               btnClassName="btn btn-secondary w-100"
-                              //   onClick={resetPassword}
                               btnLabel={formData.resetBtn.text}
                               disabled={formData.resetBtn.status ? true : false}
                             />
                           </div>
                         </div>
                       )}
-
-                      {/* <div className="col-12">
-                        <div className="text-center">
-                          <p className="mb-0">
-                            Dont't have an account ?{" "}
-                            <Link to="register" className="text-warning">
-                              Register
-                            </Link>
-                          </p>
-                        </div>
-                      </div> */}
                     </div>
                   </div>
                 </div>
