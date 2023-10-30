@@ -822,3 +822,23 @@ p.nav-link {
 .badge {
   font-size: 0.9rem !important;
 }
+
+.forgotPass {
+  color: red !important;
+}
+
+.homePage {
+  display: flex;
+  width: 50%;
+}
+
+.kknReD {
+  border-radius: 8px !important;
+}
+
+tr:nth-child(even) {
+  background-color: #e6f5f7 !important;
+}
+tr:nth-child(odd) {
+  background-color: rgb(255, 255, 255) !important;
+}
