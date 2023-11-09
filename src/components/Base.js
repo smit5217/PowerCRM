@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import useIsLoggedIn from "../hooks/useIsLoggedIn";
 import Header from "./UI/Layouts/Header";
@@ -6,7 +6,7 @@ import Notification from "./UI/Notification";
 import Shortcuts from "./General/Shortcuts";
 import NavBar from "./UI/Layouts/NavBar";
 
-function Base() {
+const Base = () => {
   const isLoggedIn = useIsLoggedIn();
 
   const navigate = useNavigate();
@@ -14,9 +14,9 @@ function Base() {
     if (!isLoggedIn) {
       navigate("/login");
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigate]);
 
-  const [sideBarStatus, setSideBarStatus] = useState(false);
+  const sideBarStatus = false;
 
   return (
     <>
@@ -40,6 +40,6 @@ function Base() {
       <Notification />
     </>
   );
-}
+};
 
 export default Base;
